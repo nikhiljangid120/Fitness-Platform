@@ -1,0 +1,665 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 15 90% 50%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 15 90% 95%;
+    --accent-foreground: 15 90% 40%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 15 90% 50%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 15 90% 50%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 15 90% 20%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 15 90% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Core Styles - 2025 Design System */
+.hero-gradient {
+  background: linear-gradient(135deg, #ff4500 0%, #ff8c00 100%);
+}
+
+.workout-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 120px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.workout-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.fitness-tip {
+  position: relative;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  margin-bottom: 1rem;
+}
+
+.fitness-tip-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.fitness-tip-content {
+  font-size: 0.875rem;
+}
+
+.progress-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #ff4500, #ff8c00);
+}
+
+.workout-timer-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #ff4500, #ff8c00);
+}
+
+/* Animation utilities */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+}
+
+/* Animation delays */
+.animation-delay-1 {
+  animation-delay: 0.2s;
+}
+.animation-delay-2 {
+  animation-delay: 0.4s;
+}
+.animation-delay-3 {
+  animation-delay: 0.6s;
+}
+.animation-delay-4 {
+  animation-delay: 0.8s;
+}
+
+/* 3D Effects */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Modern UI Components - 2025 */
+.modern-card {
+  border-radius: 24px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  position: relative;
+}
+
+.modern-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.dark .glass-effect {
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff4500, #ff8c00);
+  z-index: 1;
+}
+
+/* Button styles */
+.btn-modern {
+  border-radius: 16px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Exercise card */
+.exercise-card {
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 80px;
+}
+
+.exercise-card.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary), 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-card.completed {
+  border-color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.05);
+}
+
+.exercise-card.completed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #22c55e;
+  z-index: 1;
+}
+
+/* Progress bar */
+.progress-modern {
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-modern .progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, #ff4500, #ff8c00);
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+/* Timer display */
+.timer-display {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Confetti animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary);
+  opacity: 0;
+  z-index: 1000;
+  animation: confetti-fall 5s ease-in-out forwards;
+}
+
+/* Chat container styles */
+.chat-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+/* Message animation */
+@keyframes smooth-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-animation {
+  animation: smooth-fade-in 0.2s ease-out forwards;
+}
+
+/* Typing indicator animation */
+@keyframes optimized-typing-dot {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.typing-dot:nth-child(1) {
+  animation: optimized-typing-dot 1.2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.typing-dot:nth-child(2) {
+  animation: optimized-typing-dot 1.2s infinite 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.typing-dot:nth-child(3) {
+  animation: optimized-typing-dot 1.2s infinite 0.4s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+/* Wave animation */
+@keyframes wave {
+  0% {
+    transform: translateY(10px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+.animate-wave {
+  animation: wave 8s ease-in-out infinite;
+}
+
+/* Section fade-in animation */
+.section-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Feature icon hover */
+.feature-icon-hover {
+  transition: all 0.3s ease;
+}
+
+.feature-icon-hover:hover div {
+  background-color: rgba(255, 69, 0, 0.3);
+  transform: scale(1.1);
+}
+
+/* Performance optimizations */
+.hardware-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+/* AI Trainer specific styles */
+.ai-trainer-avatar {
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+}
+
+.ai-message {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-message::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Enhanced chat styling */
+.message-content {
+  line-height: 1.5;
+}
+
+.message-content strong {
+  font-weight: 600;
+}
+
+.message-content em {
+  font-style: italic;
+}
+
+/* Fix for asterisks in messages */
+.message-content .asterisk {
+  display: inline;
+}
+
+/* Improved bullet points */
+.message-content ul {
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-content li {
+  margin-bottom: 0.25rem;
+  display: flex;
+}
+
+.message-content li::before {
+  content: "•";
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+/* Improved numbered lists */
+.message-content ol {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  list-style-type: decimal;
+}
+
+.message-content ol li {
+  margin-bottom: 0.25rem;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: var(--popover);
+  color: var(--popover-foreground);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .workout-card {
+    min-height: 100px;
+  }
+
+  .modern-card {
+    border-radius: 16px;
+  }
+
+  .btn-modern {
+    border-radius: 12px;
+    padding: 8px 16px;
+  }
+
+  /* Fix for chat container on mobile */
+  .chat-container {
+    height: 400px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Improve touch targets */
+  button,
+  a,
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Fix for tabs overflow */
+  [role="tablist"] {
+    scrollbar-width: none;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  [role="tablist"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Adjust font sizes for mobile */
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    font-size: 0.875rem;
+  }
+}
+
+/* Fix for iOS momentum scrolling */
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent content from being hidden under fixed elements */
+main {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Fix for theme toggle z-index issues */
+.dropdown-menu-content {
+  z-index: 100;
+}
+
+/* Fix for navbar dropdown */
+header .dropdown-menu-content {
+  z-index: 1000;
+}
+
+/* Ensure proper stacking context */
+.sticky {
+  z-index: 40;
+}
+
+/* Fix for theme toggle in mobile menu */
+.theme-toggle-wrapper {
+  position: relative;
+  z-index: 50;
+}
+
+/* Fix for iOS safe areas */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: min(0vmin, env(safe-area-inset-left));
+    padding-right: min(0vmin, env(safe-area-inset-right));
+    padding-bottom: min(0vmin, env(safe-area-inset-bottom));
+  }
+}
+
+/* Improved tooltip performance */
+.tooltip-content {
+  will-change: opacity, transform;
+}
+
+/* Optimized scroll button animation */
+@keyframes optimized-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-bounce {
+  animation: optimized-bounce 1s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+/* Improved focus styles for better accessibility */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Reduce layout shifts */
+.chat-container > * {
+  contain: content;
+}
+
+/* Optimize for touch devices */
+@media (pointer: coarse) {
+  .btn-modern,
+  button,
+  .clickable {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+}
