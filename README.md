@@ -1,2 +1,2 @@
-  Fitness website made using Next.js, Typescript!
+  Fitness website made using Next.js, Typescript! 
  
