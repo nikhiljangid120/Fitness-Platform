@@ -76,8 +76,8 @@ const WorkoutDetailPage = memo(() => {
   const [intensity, setIntensity] = useState(50)
 
   // Audio state removed
-  const [time, setTime] = useState(60)
-  const [countDown, setCountDown] = useState(true)
+  const [time, setTime] = useState(30) // Default to 30s or exercise specific
+  const [countDown, setCountDown] = useState(false) // Start directly or use true for prep
 
   useEffect(() => {
     initVoices()
@@ -206,7 +206,7 @@ const WorkoutDetailPage = memo(() => {
       setIsWorkoutComplete(true)
       setIsPlaying(false)
       setShowCompletionModal(true)
-      setIsAudioPlaying(false)
+
       // audio cleanup removed
       toast({
         title: "Workout Complete!",
@@ -231,6 +231,25 @@ const WorkoutDetailPage = memo(() => {
     }
   }, [currentExerciseIndex, totalExercises, toast, handleNext])
 
+  // Timer Logic
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+
+    if (isPlaying && time > 0) {
+      interval = setInterval(() => {
+        setTime((prev) => prev - 1)
+      }, 1000)
+    } else if (time === 0 && isPlaying) {
+      if (countDown) {
+        transitionToNextExercise()
+      }
+    }
+
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [isPlaying, time, countDown, transitionToNextExercise])
+
   const handlePrevious = () => {
     if (currentExerciseIndex > 0) {
       setCurrentExerciseIndex(currentExerciseIndex - 1)
@@ -250,7 +269,7 @@ const WorkoutDetailPage = memo(() => {
     setCaloriesBurned(0)
     setHeartRate({ current: 75, max: 0, avg: 0 })
     setIntensity(50)
-    setIsAudioPlaying(false)
+
   }
 
   // toggleAudio function removed
@@ -285,11 +304,7 @@ const WorkoutDetailPage = memo(() => {
 
 
 
-  useEffect(() => {
-    if (time === 0 && !isPlaying && countDown && currentExerciseIndex < totalExercises - 1) {
-      transitionToNextExercise()
-    }
-  }, [time, isPlaying, countDown, currentExerciseIndex, totalExercises, transitionToNextExercise])
+
 
   return (
     <motion.div
@@ -597,6 +612,8 @@ const WorkoutDetailPage = memo(() => {
                 onClick={() => {
                   setCurrentExerciseIndex(index)
                   setSeconds(0)
+                  setTime(30) // Reset timer to default or parsed duration
+                  setIsPlaying(false)
                 }}
                 role="button"
                 tabIndex={0}
