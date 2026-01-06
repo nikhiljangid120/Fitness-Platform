@@ -65,6 +65,10 @@ const WorkoutDetailPage = memo(() => {
   const params = useParams()
   const { toast } = useToast()
   const { width, height } = useWindowSize()
+
+  const category = workoutCategories.find((c) => c.id === params.category)
+  const workout = category?.workouts.find((w) => w.id === params.id)
+
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [seconds, setSeconds] = useState(0)
@@ -127,8 +131,8 @@ const WorkoutDetailPage = memo(() => {
 
   // Removed broken audio initialization to prevent "element has no supported sources" error
 
-  const category = workoutCategories.find((c) => c.id === params.category)
-  const workout = category?.workouts.find((w) => w.id === params.id)
+  // Removed broken audio initialization for cleanup
+
 
   if (!workout) {
     return (
