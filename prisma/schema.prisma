@@ -25,6 +25,7 @@ model User {
 
   progress       Progress[]
   completedWorkouts CompletedWorkout[]
+  chatSessions   ChatSession[]
 }
 
 model CompletedWorkout {
@@ -46,4 +47,25 @@ model Progress {
   weight    Float    // kg
   
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ChatSession {
+  id        String    @id @default(cuid())
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String?   // Auto-generated summary
+
+  messages  Message[]
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  sessionId String
+  role      String   // "user" | "model"
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }
