@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { 
-  Send, Bot, User, Info, Dumbbell, Zap, Brain, Loader2, Save, 
-  Copy, Trash, Moon, Sun, ChevronRight, ChevronLeft, Maximize, 
+import {
+  Send, Bot, User, Info, Dumbbell, Zap, Brain, Loader2, Save,
+  Copy, Trash, Moon, Sun, ChevronRight, ChevronLeft, Maximize,
   Minimize, Mic, MicOff, ThumbsUp, MessageSquare, Volume2
 } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -40,6 +40,10 @@ interface QuickReply {
 
 const generateId = () => `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
+import { useTheme } from "next-themes"
+
+// ... imports
+
 export default function AITrainerPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -52,13 +56,13 @@ export default function AITrainerPage() {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
-  const [theme, setTheme] = useState<"light" | "dark">("light")
+  const { theme, setTheme } = useTheme()
   const [sidebarVisible, setSidebarVisible] = useState(true)
   const [fullscreenMode, setFullscreenMode] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
   const [autoScroll, setAutoScroll] = useState(true)
   const [chatHeight, setChatHeight] = useState("500px")
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -73,8 +77,8 @@ export default function AITrainerPage() {
 
   // Theme toggle
   const toggleTheme = useCallback(() => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"))
-  }, [])
+    setTheme(theme === "light" ? "dark" : "light")
+  }, [theme, setTheme])
 
   // Sidebar toggle
   const toggleSidebar = useCallback(() => {
@@ -92,10 +96,7 @@ export default function AITrainerPage() {
     }, 100)
   }, [fullscreenMode])
 
-  // Apply theme to document
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark")
-  }, [theme])
+  // Removed manual document class toggle as next-themes handles it
 
   // Adjust height on resize
   useEffect(() => {
@@ -110,7 +111,7 @@ export default function AITrainerPage() {
         setChatHeight("500px")
       }
     }
-    
+
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
@@ -183,7 +184,7 @@ export default function AITrainerPage() {
       let displayedText = ""
       let index = 0
       const cleanedText = text.trim()
-      
+
       // Vary typing speed based on content complexity
       const getTypingSpeed = (currentChar: string, nextChar: string) => {
         if (['.', '!', '?', '\n'].includes(currentChar)) {
@@ -203,7 +204,7 @@ export default function AITrainerPage() {
           displayedText += currentChar
           callback(displayedText)
           index++
-          
+
           const delay = getTypingSpeed(currentChar, nextChar)
           setTimeout(typeNextChar, delay)
         } else {
@@ -212,10 +213,10 @@ export default function AITrainerPage() {
           scrollToBottom()
         }
       }
-      
+
       typeNextChar()
-      
-      return () => { 
+
+      return () => {
         setIsTyping(false)
       }
     },
@@ -230,8 +231,8 @@ export default function AITrainerPage() {
           toast({ title: "Already saved", description: "This response is already in your saved items" })
           return prev
         }
-        toast({ 
-          title: "Response saved", 
+        toast({
+          title: "Response saved",
           description: "You can access this response from the sidebar"
         })
         return [...prev, message]
@@ -244,7 +245,7 @@ export default function AITrainerPage() {
   const copyToClipboard = useCallback(
     (text: string) => {
       navigator.clipboard.writeText(text).then(() => {
-        toast({ 
+        toast({
           title: "Copied to clipboard",
           description: "Text copied successfully"
         })
@@ -255,10 +256,10 @@ export default function AITrainerPage() {
 
   // Like message
   const toggleLikeMessage = useCallback((messageId: string) => {
-    setMessages(prev => 
-      prev.map(msg => 
-        msg.id === messageId 
-          ? { ...msg, liked: !msg.liked } 
+    setMessages(prev =>
+      prev.map(msg =>
+        msg.id === messageId
+          ? { ...msg, liked: !msg.liked }
           : msg
       )
     )
@@ -268,9 +269,9 @@ export default function AITrainerPage() {
   const processMessages = useCallback((messages: Message[]) => {
     return messages.map((message, index, array) => {
       const prevMessage = index > 0 ? array[index - 1] : null
-      const isContinuation = prevMessage && 
-                            prevMessage.role === message.role &&
-                            new Date(message.timestamp).getTime() - new Date(prevMessage.timestamp).getTime() < 60000
+      const isContinuation = prevMessage &&
+        prevMessage.role === message.role &&
+        new Date(message.timestamp).getTime() - new Date(prevMessage.timestamp).getTime() < 60000
 
       return {
         ...message,
@@ -313,11 +314,11 @@ export default function AITrainerPage() {
   // Calculate suggested quick replies based on conversation context
   const getQuickReplies = useCallback((): QuickReply[] => {
     const lastAssistantMessage = [...messages].reverse().find(m => m.role === "assistant")
-    
+
     if (!lastAssistantMessage) return []
-    
+
     const content = lastAssistantMessage.content.toLowerCase()
-    
+
     if (content.includes("workout") || content.includes("exercise")) {
       return [
         { text: "Show me variations", icon: <Dumbbell className="h-3 w-3" /> },
@@ -329,7 +330,7 @@ export default function AITrainerPage() {
         { text: "Healthy alternatives?", icon: <Info className="h-3 w-3" /> }
       ]
     }
-    
+
     // Default quick replies
     return [
       { text: "Tell me more", icon: <MessageSquare className="h-3 w-3" /> },
@@ -344,11 +345,11 @@ export default function AITrainerPage() {
       if (!input.trim()) return
 
       handleUserInteraction()
-      const userMessage = { 
-        role: "user" as const, 
-        content: input, 
-        id: generateId(), 
-        timestamp: new Date() 
+      const userMessage = {
+        role: "user" as const,
+        content: input,
+        id: generateId(),
+        timestamp: new Date()
       }
       setMessages((prev) => [...prev, userMessage])
 
@@ -356,7 +357,7 @@ export default function AITrainerPage() {
       setInput("")
       setIsLoading(true)
       setUserScrolled(false)
-      
+
       // Focus the input after sending
       if (inputRef.current) {
         inputRef.current.focus()
@@ -364,11 +365,11 @@ export default function AITrainerPage() {
 
       try {
         const responseId = generateId()
-        const tempMessage: Message = { 
-          role: "assistant", 
-          content: "", 
-          id: responseId, 
-          timestamp: new Date() 
+        const tempMessage: Message = {
+          role: "assistant",
+          content: "",
+          id: responseId,
+          timestamp: new Date()
         }
         setMessages((prev) => [...prev, tempMessage])
 
@@ -417,17 +418,17 @@ export default function AITrainerPage() {
       if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
         handleSubmit()
       }
-      
+
       // Escape to exit fullscreen
       if (e.key === "Escape" && fullscreenMode) {
         toggleFullscreen()
       }
-      
+
       // Alt+T to toggle theme
       if (e.key === "t" && e.altKey) {
         toggleTheme()
       }
-      
+
       // Alt+S to toggle sidebar
       if (e.key === "s" && e.altKey) {
         toggleSidebar()
@@ -448,7 +449,7 @@ export default function AITrainerPage() {
         timestamp: new Date(),
       },
     ])
-    toast({ 
+    toast({
       title: "Chat cleared",
       description: "Starting a fresh conversation"
     })
@@ -466,7 +467,7 @@ export default function AITrainerPage() {
 
   // Process messages for display
   const processedMessages = processMessages(messages)
-  
+
   // Determine if we should scroll to bottom button
   const showScrollToBottom = userScrolled && messages.length > 3
 
@@ -510,26 +511,24 @@ export default function AITrainerPage() {
   }
 
   return (
-    <div 
-      className={`min-h-screen bg-gradient-to-br ${
-        theme === "light" 
-          ? "from-blue-50 via-purple-50 to-indigo-100" 
+    <div
+      className={`min-h-screen bg-gradient-to-br ${theme === "light"
+          ? "from-blue-50 via-purple-50 to-indigo-100"
           : "from-gray-900 via-indigo-950 to-purple-950"
-      } transition-colors duration-500 ${theme}`}
+        } transition-colors duration-500 ${theme}`}
     >
-      <div 
-        className={`container mx-auto px-2 sm:px-4 py-4 sm:py-8 ${
-          fullscreenMode ? "max-w-full h-screen flex flex-col" : "max-w-7xl"
-        }`}
+      <div
+        className={`container mx-auto px-2 sm:px-4 py-4 sm:py-8 ${fullscreenMode ? "max-w-full h-screen flex flex-col" : "max-w-7xl"
+          }`}
       >
         <div className={`grid grid-cols-1 ${sidebarVisible ? "lg:grid-cols-4" : "lg:grid-cols-1"} gap-4 ${fullscreenMode ? "h-full" : ""}`}>
           {/* Main Chat Area */}
           <div className={`lg:col-span-${sidebarVisible ? "3" : "1"} ${fullscreenMode ? "h-full flex flex-col" : ""}`}>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
               <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="lg:hidden"
                   onClick={toggleSidebar}
                   aria-label="Toggle sidebar"
@@ -561,7 +560,7 @@ export default function AITrainerPage() {
                     </TooltipTrigger>
                     <TooltipContent>Toggle theme (Alt+T)</TooltipContent>
                   </Tooltip>
-                  
+
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -576,7 +575,7 @@ export default function AITrainerPage() {
                     </TooltipTrigger>
                     <TooltipContent>{fullscreenMode ? "Exit" : "Enter"} fullscreen</TooltipContent>
                   </Tooltip>
-                  
+
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -592,7 +591,7 @@ export default function AITrainerPage() {
                     </TooltipTrigger>
                     <TooltipContent>Clear chat</TooltipContent>
                   </Tooltip>
-                  
+
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -611,7 +610,7 @@ export default function AITrainerPage() {
               </div>
             </div>
 
-            <Card 
+            <Card
               className={`
                 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg 
                 shadow-xl border border-gray-200/50 dark:border-gray-700/50
@@ -644,7 +643,7 @@ export default function AITrainerPage() {
                     {processedMessages.map((message, index) => {
                       const showAvatar = !message.isContinuation
                       const isLast = index === processedMessages.length - 1
-                      
+
                       return (
                         <motion.div
                           key={message.id}
@@ -655,9 +654,8 @@ export default function AITrainerPage() {
                           className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                         >
                           <div
-                            className={`flex gap-2 max-w-[90%] sm:max-w-[80%] md:max-w-[75%] ${
-                              message.role === "user" ? "flex-row-reverse" : ""
-                            }`}
+                            className={`flex gap-2 max-w-[90%] sm:max-w-[80%] md:max-w-[75%] ${message.role === "user" ? "flex-row-reverse" : ""
+                              }`}
                           >
                             {showAvatar && (
                               <div className="mt-1">
@@ -677,9 +675,9 @@ export default function AITrainerPage() {
                                 </Avatar>
                               </div>
                             )}
-                            
+
                             {!showAvatar && <div className="w-8 sm:w-9"></div>}
-                            
+
                             <div className="flex flex-col">
                               {showAvatar && (
                                 <div className={`flex items-center mb-1 ${message.role === "user" ? "justify-end" : ""}`}>
@@ -691,13 +689,13 @@ export default function AITrainerPage() {
                                   </span>
                                 </div>
                               )}
-                              
+
                               <div
                                 className={`
                                   rounded-2xl px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base 
                                   ${message.isContinuation ? (
-                                    message.role === "assistant" 
-                                      ? "rounded-tl-md mt-1" 
+                                    message.role === "assistant"
+                                      ? "rounded-tl-md mt-1"
                                       : "rounded-tr-md mt-1"
                                   ) : ""} 
                                   ${message.role === "assistant"
@@ -726,7 +724,7 @@ export default function AITrainerPage() {
                                         </TooltipTrigger>
                                         <TooltipContent>Copy</TooltipContent>
                                       </Tooltip>
-                                      
+
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <Button
@@ -741,7 +739,7 @@ export default function AITrainerPage() {
                                         </TooltipTrigger>
                                         <TooltipContent>Save</TooltipContent>
                                       </Tooltip>
-                                      
+
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <Button
@@ -760,7 +758,7 @@ export default function AITrainerPage() {
                                   </div>
                                 )}
                               </div>
-                              
+
                               {message.role === "assistant" && isLast && !isTyping && (
                                 <div className="flex flex-wrap gap-2 mt-2">
                                   {getQuickReplies().map((reply, index) => (
@@ -777,7 +775,7 @@ export default function AITrainerPage() {
                                   ))}
                                 </div>
                               )}
-                              
+
                               {message.role === "assistant" && message.content && !message.isContinuation && (
                                 <div className="mt-1 opacity-80 self-start">
                                   <EnhancedTextToSpeech text={message.content} />
@@ -789,7 +787,7 @@ export default function AITrainerPage() {
                       )
                     })}
                   </AnimatePresence>
-                  
+
                   {isLoading && !isTyping && (
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -813,10 +811,10 @@ export default function AITrainerPage() {
                       </div>
                     </motion.div>
                   )}
-                  
+
                   <div ref={messagesEndRef} />
                 </div>
-                
+
                 {/* Scroll to bottom button */}
                 {showScrollToBottom && (
                   <Button
@@ -851,8 +849,8 @@ export default function AITrainerPage() {
                           disabled={isLoading || isRecording}
                           onClick={toggleRecording}
                           className={`
-                            ${isRecording 
-                              ? "bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700" 
+                            ${isRecording
+                              ? "bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
                               : "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
                             } transition-all
                           `}
@@ -866,7 +864,7 @@ export default function AITrainerPage() {
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
-                  
+
                   <Button
                     type="submit"
                     disabled={isLoading || !input.trim()}
@@ -876,7 +874,7 @@ export default function AITrainerPage() {
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   </Button>
                 </form>
-                
+
                 <div className="flex justify-center mt-2">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     Press <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 font-mono text-xs">Ctrl</kbd>+<kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 font-mono text-xs">Enter</kbd> to send
@@ -908,9 +906,9 @@ export default function AITrainerPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <Separator className="my-4 bg-gray-200 dark:bg-gray-700" />
-                  
+
                   {/* Suggested Questions */}
                   <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-900 dark:text-white flex items-center">
                     <MessageSquare className="h-4 w-4 mr-2" /> Ask Me About
@@ -997,7 +995,7 @@ export default function AITrainerPage() {
                         <span className="text-xs">Motivation</span>
                       </Badge>
                     </div>
-                    
+
                     <ul className="space-y-2 mt-4 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
                       <li className="flex items-start gap-2">
                         <Dumbbell className="h-4 w-4 text-orange-500 shrink-0 mt-0.5" />
