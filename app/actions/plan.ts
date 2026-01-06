@@ -20,7 +20,7 @@ export async function generateWeeklyPlan() {
             take: 5
         })
 
-        const historySummary = recentWorkouts.map(w =>
+        const historySummary = recentWorkouts.map((w: any) =>
             `- ${w.title}: Rated ${w.difficulty || "N/A"}/10 (${w.notes || "No notes"})`
         ).join("\n")
 

@@ -25,7 +25,7 @@ export default async function MyPlanPage() {
 
   // Create a set of unique dates where workout happened
   const workoutDates = new Set(
-    workouts.map(w => {
+    workouts.map((w: any) => {
       const d = new Date(w.completedAt)
       d.setHours(0, 0, 0, 0)
       return d.getTime()
