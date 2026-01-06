@@ -24,6 +24,12 @@ import {
   Dumbbell,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { getImageForKeyword } from "@/lib/image-mapper"
+import { Confetti } from "@/components/ui/confetti"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import WorkoutTimer from "@/components/workout-timer"
 import EnhancedTextToSpeech from "@/components/enhanced-text-to-speech"
 import { initVoices, preloadSpeechSynthesis } from "@/lib/speech-synthesis"
@@ -346,12 +352,277 @@ const WorkoutDetailPage = memo(() => {
 
 
 
+  // Determine image to show
+  const displayImage = currentExercise?.image && currentExercise.image.length > 5
+    ? currentExercise.image
+    : getImageForKeyword(currentExercise?.title || "workout")
+
   return (
-    <div className="p-10 text-center">
-      <h1>Debug Mode</h1>
-      <p>If you see this, the logic above is fine, and the error was in the JSX.</p>
-      <button onClick={handleSaveWithFeedback}>Test Save</button>
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen bg-background pb-20"
+      role="main"
+      aria-label="FlexForge Workout Detail Page"
+    >
+      {isWorkoutComplete && <Confetti />}
+
+      {/* Fixed Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center justify-between">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/workouts">
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Exit
+            </Link>
+          </Button>
+          <div className="font-semibold">{workout.title}</div>
+          <div className="flex items-center gap-2">
+            <Badge variant={countDown ? "secondary" : "default"} className={countDown ? "animate-pulse" : ""}>
+              {countDown ? "REST" : "WORK"}
+            </Badge>
+          </div>
+        </div>
+        <Progress value={progress} className="h-1" />
+      </header>
+
+      <div className="container py-6 max-w-6xl">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-[calc(100vh-140px)] min-h-[600px]">
+
+          {/* Left Column: Visuals */}
+          <Card className="lg:col-span-2 overflow-hidden relative border-none shadow-2xl bg-black/5 dark:bg-black/20 flex flex-col">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentExercise.id + (countDown ? "-rest" : "-work")}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="absolute inset-0 z-0"
+              >
+                {/* Background Image / Video */}
+                <div className="absolute inset-0 bg-black/40 z-10" />
+                <img
+                  src={countDown ? getImageForKeyword("rest") : displayImage}
+                  alt={currentExercise.title}
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Overlay Content */}
+            <div className="relative z-20 flex-1 flex flex-col justify-between p-8 text-white">
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <motion.h2
+                    key={currentExercise.title}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="text-3xl md:text-5xl font-bold tracking-tight shadow-black/50 drop-shadow-lg"
+                  >
+                    {countDown ? "Rest" : currentExercise.title}
+                  </motion.h2>
+                  {!countDown && (
+                    <p className="text-lg text-white/90 drop-shadow-md">{currentExercise.reps}</p>
+                  )}
+                </div>
+
+                <div className="text-right">
+                  <div className="text-6xl font-black tracking-tighter drop-shadow-xl" style={{ fontVariantNumeric: "tabular-nums" }}>
+                    {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}
+                  </div>
+                  <p className="text-sm uppercase tracking-widest opacity-80 mt-1">
+                    {countDown ? "Recovery" : "Time Remaining"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Center Motivation or Instruction */}
+              <div className="flex-1 flex items-center justify-center text-center">
+                <AnimatePresence mode="wait">
+                  {countDown ? (
+                    <motion.div
+                      key="rest-msg"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="max-w-md"
+                    >
+                      <p className="text-2xl font-light italic">"Recovery is where the growth happens."</p>
+                      <p className="mt-4 text-white/80">Next: {exercises[currentExerciseIndex + 1]?.title || "Finish"}</p>
+                    </motion.div>
+                  ) : (
+                    <div className="hidden md:block">
+                      {/* Keeps the center clear for the exercise view, or we could put tips here */}
+                    </div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Bottom Controls Overlay */}
+              <div className="flex items-center justify-between gap-4 bg-black/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handlePrevious}
+                  disabled={currentExerciseIndex === 0}
+                  className="text-white hover:bg-white/20"
+                >
+                  <ChevronLeft className="h-8 w-8" />
+                </Button>
+
+                <div className="flex items-center gap-6">
+                  <Button
+                    size="icon"
+                    className="h-16 w-16 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg scale-100 hover:scale-105 transition-transform"
+                    onClick={handlePlayPause}
+                  >
+                    {isPlaying ? (
+                      <div className="h-6 w-6 bg-current rounded-sm" /> /* Pause Icon visual */
+                    ) : (
+                      <div className="h-0 w-0 border-y-[12px] border-y-transparent border-l-[20px] border-l-current ml-1" /> /* Play Icon visual */
+                    )}
+                  </Button>
+
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    onClick={handleReset}
+                    className="h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 text-white"
+                  >
+                    <div className="h-5 w-5 border-2 border-current rounded-full" /> {/* Reset visual */}
+                  </Button>
+                </div>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleNext}
+                  disabled={currentExerciseIndex === totalExercises - 1}
+                  className="text-white hover:bg-white/20"
+                >
+                  <ChevronRight className="h-8 w-8" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+
+          {/* Right Column: Details & Stats */}
+          <div className="flex flex-col gap-6 h-full overflow-hidden">
+            {/* Stats */}
+            <Card className="flex-none">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium uppercase tracking-wider text-muted-foreground">Session Stats</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col">
+                  <span className="text-3xl font-bold">{Math.round(caloriesBurned)}</span>
+                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Flame className="h-3 w-3 text-orange-500" />
+                    Calories
+                  </span>
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex items-end gap-1">
+                    <span className="text-3xl font-bold">{Math.round(heartRate.current)}</span>
+                    <span className="text-sm font-medium text-muted-foreground mb-1">bpm</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Zap className="h-3 w-3 text-red-500" />
+                    Heart Rate
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Instructions Scroll */}
+            <Card className="flex-1 overflow-hidden flex flex-col">
+              <CardHeader className="pb-2 flex-none">
+                <CardTitle>Instructions</CardTitle>
+              </CardHeader>
+              <Separator />
+              <ScrollArea className="flex-1 p-6">
+                <div className="prose dark:prose-invert">
+                  <p className="text-lg leading-relaxed">
+                    {countDown
+                      ? "Get ready for the next exercise. Focus on your breathing and prepare your setup."
+                      : currentExercise.instructions}
+                  </p>
+
+                  <div className="mt-8 p-4 bg-muted rounded-lg">
+                    <h4 className="font-semibold flex items-center gap-2 mb-2">
+                      <Brain className="h-4 w-4 text-purple-500" />
+                      Trainer Tip
+                    </h4>
+                    <p className="text-sm text-muted-foreground italic">
+                      "{randomQuote}"
+                    </p>
+                  </div>
+                </div>
+              </ScrollArea>
+            </Card>
+
+            {/* Next Up Preview */}
+            <Card className="flex-none bg-muted/30">
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="h-12 w-12 rounded bg-muted overflow-hidden relative">
+                  <img
+                    src={exercises[currentExerciseIndex + 1] ? (exercises[currentExerciseIndex + 1].image || getImageForKeyword(exercises[currentExerciseIndex + 1].title)) : getImageForKeyword("finish")}
+                    className="w-full h-full object-cover"
+                    alt="Next"
+                  />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground uppercase">Up Next</p>
+                  <p className="font-semibold truncate max-w-[150px]">
+                    {exercises[currentExerciseIndex + 1]?.title || "Workout Complete"}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+
+      {/* Feedback Dialog */}
+      <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Workout Complete!</DialogTitle>
+            <DialogDescription>
+              Great work! How was the session?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label>Difficulty Rating</Label>
+              <RadioGroup
+                value={difficulty}
+                onValueChange={setDifficulty}
+                className="flex justify-between"
+              >
+                {["Easy", "Medium", "Hard"].map((level) => (
+                  <div key={level} className="flex items-center space-x-2">
+                    <RadioGroupItem value={level} id={level} />
+                    <Label htmlFor={level} className="cursor-pointer">{level}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+            <div className="grid gap-2">
+              <Label>Notes</Label>
+              <Textarea
+                placeholder="How did you feel? Any pain or personal bests?"
+                onChange={(e) => setNotes(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={handleSaveWithFeedback}>Save Workout</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </motion.div>
   )
 })
 
