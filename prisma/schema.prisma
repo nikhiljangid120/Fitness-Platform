@@ -1,14 +1,49 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String?
+  image          String?
+  height         Float?    // stored in cm
+  weight         Float?    // stored in kg
+  fitnessGoal    String?   // e.g., "WEIGHT_LOSS", "MUSCLE_GAIN"
+  activityLevel  String?
+  
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  progress       Progress[]
+  completedWorkouts CompletedWorkout[]
+}
+
+model CompletedWorkout {
+  id          String   @id @default(cuid())
+  userId      String
+  workoutId   String   // Reference to the static ID in our dataset
+  title       String
+  duration    Int      // in seconds
+  calories    Int      // estimated burn
+  completedAt DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime @default(now())
+  weight    Float    // kg
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
