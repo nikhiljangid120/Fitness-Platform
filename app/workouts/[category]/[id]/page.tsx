@@ -54,160 +54,7 @@ const useWindowSize = () => {
 }
 
 // FlexForge-themed CSS
-const styles = `
-  :root {
-    --primary: #ff4d4f;
-    --primary-dark: #d9363e;
-    --secondary: #1890ff;
-    --background: #f7fafc;
-    --card-bg: #ffffff;
-    --text: #1a202c;
-    --text-muted: #718096;
-    --flexforge-accent: #ff6b6b;
-  }
 
-  .dark {
-    --primary: #ff7875;
-    --primary-dark: #f56565;
-    --secondary: #40c4ff;
-    --background: #1a202c;
-    --card-bg: #2d3748;
-    --text: #e2e8f0;
-    --text-muted: #a0aec0;
-    --flexforge-accent: #ff8787;
-  }
-
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  .modern-card {
-    background: var(--card-bg);
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .modern-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-  }
-
-  .gradient-border {
-    position: relative;
-    border: none;
-  }
-
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 1rem;
-    background: linear-gradient(45deg, var(--primary), var(--flexforge-accent));
-    z-index: -1;
-  }
-
-  .btn-modern {
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    background: var(--primary);
-    color: white;
-  }
-
-  .btn-modern:hover {
-    transform: scale(1.05);
-    background: var(--primary-dark);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-
-  .progress-ring {
-    position: relative;
-    width: 120px;
-    height: 120px;
-  }
-
-  .progress-ring__circle {
-    transition: stroke-dashoffset 0.35s;
-    transform: rotate(-90deg);
-    transform-origin: 50% 50%;
-  }
-
-  .exercise-card {
-    transition: all 0.3s ease;
-  }
-
-  .exercise-card.active {
-    background: linear-gradient(45deg, var(--primary), var(--flexforge-accent));
-    color: white;
-  }
-
-  .exercise-card.completed {
-    opacity: 0.7;
-    background: var(--background);
-  }
-
-  .workout-card {
-    transition: transform 0.3s ease;
-  }
-
-  .workout-card:hover {
-    transform: scale(1.02);
-  }
-
-  .flexforge-branding {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    color: var(--flexforge-accent);
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      padding: 1rem;
-    }
-
-    .modern-card {
-      border-radius: 0.75rem;
-    }
-
-    .btn-modern {
-      padding: 0.5rem 1rem;
-    }
-
-    h1 {
-      font-size: 1.75rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-    }
-
-    .progress-ring {
-      width: 80px;
-      height: 80px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .grid-cols-2 {
-      grid-template-columns: 1fr;
-    }
-
-    .btn-modern {
-      font-size: 0.875rem;
-    }
-  }
-`
-
-if (typeof document !== "undefined") {
-  const styleSheet = document.createElement("style")
-  styleSheet.innerText = styles
-  document.head.appendChild(styleSheet)
-}
 
 const WorkoutDetailPage = memo(() => {
   const params = useParams()
@@ -467,32 +314,7 @@ const WorkoutDetailPage = memo(() => {
     return tips[Math.floor(Math.random() * tips.length)]
   }, [currentExercise.title])
 
-  const getExerciseImageUrl = useCallback((exercise: any) => {
-    // Map of keywords to image URLs (prioritizing available local GIFs, then Unsplash)
-    const exerciseImages: { [key: string]: string } = {
-      // Local GIFs that exist
-      squat: "/exercises/squats.gif",
-      plank: "/exercises/plank.gif",
-      burpee: "/exercises/burpees.gif",
-      mountain: "/exercises/mountain-climbers.gif",
 
-      // Fallbacks for missing local GIFs using high-quality Unsplash images
-      push: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop", // Pushups
-      lunge: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop", // Lunges ( reusing similar fitness image)
-      row: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop", // Rows
-
-      // Existing remote mappings
-      deadlift: "https://images.unsplash.com/photo-1517344884509-a0c97ec11bcc?q=80&w=2070&auto=format&fit=crop",
-      bench: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop",
-      pull: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=2074&auto=format&fit=crop",
-      yoga: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
-      stretch: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=2026&auto=format&fit=crop",
-      pose: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
-    }
-
-    const key = Object.keys(exerciseImages).find((k) => exercise.title.toLowerCase().includes(k))
-    return key ? exerciseImages[key] : "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop"
-  }, [])
 
   useEffect(() => {
     if (time === 0 && !isPlaying && countDown && currentExerciseIndex < totalExercises - 1) {
@@ -743,7 +565,7 @@ const WorkoutDetailPage = memo(() => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                       <div className="aspect-square md:aspect-auto bg-muted rounded-md overflow-hidden relative">
                         <Image
-                          src={getExerciseImageUrl(currentExercise)}
+                          src={currentExercise.image}
                           alt={currentExercise.title}
                           fill
                           className="object-cover"
