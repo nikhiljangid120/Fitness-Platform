@@ -12,6 +12,7 @@
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.36.5",
     "@emotion/is-prop-valid": "latest",
     "@google/generative-ai": "latest",
     "@hookform/resolvers": "^3.9.1",

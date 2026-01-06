@@ -4,9 +4,10 @@ import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
-import { Menu, X, Dumbbell } from "lucide-react"
+import { Menu, X, Dumbbell, User } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -81,9 +82,19 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-4">
           <ModeToggle />
-          <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90">
-            <Link href="/onboarding">Get Started</Link>
-          </Button>
+          <SignedOut>
+            <div className="flex gap-2">
+              <SignInButton mode="modal">
+                <Button variant="ghost" size="sm">Log in</Button>
+              </SignInButton>
+              <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90">
+                <Link href="/sign-up">Get Started</Link>
+              </Button>
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
 
         {/* Mobile Menu Button */}
@@ -111,9 +122,20 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Button asChild className="mt-2 bg-primary hover:bg-primary/90">
-              <Link href="/onboarding">Get Started</Link>
-            </Button>
+            <SignedOut>
+              <Button asChild className="mt-2 bg-primary hover:bg-primary/90">
+                <Link href="/sign-up">Get Started</Link>
+              </Button>
+              <SignInButton mode="modal">
+                <Button variant="outline" className="mt-2 w-full">Log in</Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <div className="mt-2 flex items-center gap-2">
+                <UserButton afterSignOutUrl="/" />
+                <span className="text-sm font-medium">Account</span>
+              </div>
+            </SignedIn>
           </div>
         </div>
       )}

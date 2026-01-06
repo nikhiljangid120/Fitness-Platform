@@ -23,15 +23,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-      </head>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Navbar />
-          {children}
-          <Script id="section-animations" strategy="afterInteractive">
-            {`
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+        </head>
+        <body className={inter.className}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <Navbar />
+            {children}
+            <Script id="section-animations" strategy="afterInteractive">
+              {`
               function handleIntersection(entries, observer) {
                 entries.forEach(entry => {
                   if (entry.isIntersecting) {
@@ -66,9 +66,10 @@ export default function RootLayout({
                 });
               });
             `}
-          </Script>
-        </ThemeProvider>
-      </body>
-    </html>
+            </Script>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
