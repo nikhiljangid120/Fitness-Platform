@@ -6,25 +6,33 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Clock,
   Dumbbell,
-  ChevronLeft,
-  ChevronRight,
-  Play,
-  Pause,
-  RotateCcw,
-  CheckCircle,
-  Flame,
-  Heart,
-  Zap,
-  Info,
-  Volume2,
-  Users,
-} from "lucide-react"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+  } from "@/components/ui/dialog"
+import { Slider } from "@/components/ui/slider"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import WorkoutTimer from "@/components/workout-timer"
 import EnhancedTextToSpeech from "@/components/enhanced-text-to-speech"
@@ -86,31 +94,44 @@ const WorkoutDetailPage = memo(() => {
     preloadSpeechSynthesis()
   }, [])
 
-  // Auto-save workout when complete
+  // State for feedback
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
+  const [difficulty, setDifficulty] = useState([5]) // 1-10
+  const [notes, setNotes] = useState("")
+
+  // Auto-save happens AFTER feedback now
   useEffect(() => {
-    if (isWorkoutComplete && workout && !savedRef.current) {
-      savedRef.current = true
-
-      const durationInSeconds = parseInt(workout.duration || "0") * 60
-
-      saveWorkout({
-        workoutId: workout.id,
-        title: workout.title,
-        duration: durationInSeconds || 1800, // Fallback to 30m
-        calories: Math.round(caloriesBurned),
-      }).then((result) => {
-        if (result.success) {
-          toast({
-            title: "Workout Saved!",
-            description: "Your progress has been recorded to your profile.",
-          })
-        } else {
-          // Silently fail or log, user still gets "Workout Complete" toast
-          console.error("Failed to save workout")
-        }
-      })
+    // If workout is complete but not saved, show feedback dialog
+    if (isWorkoutComplete && workout && !savedRef.current && !showFeedbackDialog) {
+      setShowFeedbackDialog(true)
     }
-  }, [isWorkoutComplete, workout, caloriesBurned, toast])
+  }, [isWorkoutComplete, workout, showFeedbackDialog])
+
+  const handleSaveWithFeedback = () => {
+    if (!workout || savedRef.current) return
+    savedRef.current = true
+
+    const durationInSeconds = parseInt(workout.duration || "0") * 60
+
+    saveWorkout({
+      workoutId: workout.id,
+      title: workout.title,
+      duration: durationInSeconds || 1800,
+      calories: Math.round(caloriesBurned),
+      difficulty: difficulty[0],
+      notes: notes
+    }).then((result) => {
+      setShowFeedbackDialog(false)
+      if (result.success) {
+        toast({
+          title: "Workout Saved!",
+          description: "Great job! Your progress has been recorded.",
+        })
+      } else {
+        console.error("Failed to save workout")
+      }
+    })
+  }
 
   // Removed broken audio initialization
 
@@ -760,7 +781,50 @@ const WorkoutDetailPage = memo(() => {
       </motion.div>
 
 
+      </div>
 
+      <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Workout Complete!</DialogTitle>
+            <DialogDescription>
+              Great job! How was the workout?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-6 py-4">
+            <div className="grid gap-2">
+              <Label>Difficulty: {difficulty[0]}/10</Label>
+              <Slider
+                defaultValue={[5]}
+                max={10}
+                min={1}
+                step={1}
+                value={difficulty}
+                onValueChange={setDifficulty}
+                className="py-4"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Too Easy</span>
+                <span>Perfect</span>
+                <span>Too Hard</span>
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="notes">Notes (Optional)</Label>
+              <Textarea
+                id="notes"
+                placeholder="How did you feel? Any pain or personal bests?"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+             <Button onClick={handleSaveWithFeedback} className="w-full">Save Workout</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    
     </motion.div >
   )
 })
