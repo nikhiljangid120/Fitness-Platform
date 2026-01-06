@@ -74,7 +74,7 @@ const WorkoutDetailPage = memo(() => {
   const [caloriesBurned, setCaloriesBurned] = useState(0)
   const [heartRate, setHeartRate] = useState({ current: 75, max: 0, avg: 0 })
   const [intensity, setIntensity] = useState(50)
-  const [intensity, setIntensity] = useState(50)
+
   // Audio state removed
   const [time, setTime] = useState(60)
   const [countDown, setCountDown] = useState(true)
