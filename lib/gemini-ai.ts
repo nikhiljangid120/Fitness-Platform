@@ -25,7 +25,7 @@ export async function generateAIResponse(prompt: string): Promise<string> {
           content: prompt
         }
       ],
-      model: "llama3-70b-8192", // Fast and capable
+      model: "llama-3.3-70b-versatile", // Updated to supported model
       temperature: 0.7,
       max_tokens: 4096,
     })
@@ -57,22 +57,6 @@ function getFallbackResponse(prompt: string): string {
     promptLower.includes("meal")
   ) {
     category = "nutrition"
-  } else if (promptLower.includes("stretch") || promptLower.includes("flexible") || promptLower.includes("mobility")) {
-    category = "flexibility"
-  } else if (
-    promptLower.includes("weight loss") ||
-    promptLower.includes("lose weight") ||
-    promptLower.includes("fat") ||
-    promptLower.includes("slim")
-  ) {
-    category = "weight_loss"
-  } else if (
-    promptLower.includes("muscle") ||
-    promptLower.includes("strength") ||
-    promptLower.includes("gain") ||
-    promptLower.includes("bulk")
-  ) {
-    category = "muscle_gain"
   }
 
   // Simple JSON fallback if the prompt explicitly asks for JSON (detected by structure)
@@ -85,8 +69,29 @@ function getFallbackResponse(prompt: string): string {
         dinner: "Salmon with quinoa",
         snack: "Greek yogurt"
       })
+    } else if (category === "workout") {
+      // Return a valid empty/default week plan to prevent JSON parse errors
+      return JSON.stringify([
+        {
+          "day": "Monday",
+          "workout": {
+            "title": "Full Body Circuit",
+            "description": "A comprehensive full-body workout",
+            "duration": "45 min",
+            "level": "Beginner",
+            "equipment": ["None"],
+            "exercises": []
+          },
+          "rest": false
+        },
+        { "day": "Tuesday", "workout": null, "rest": true },
+        { "day": "Wednesday", "workout": null, "rest": true },
+        { "day": "Thursday", "workout": null, "rest": true },
+        { "day": "Friday", "workout": null, "rest": true },
+        { "day": "Saturday", "workout": null, "rest": true },
+        { "day": "Sunday", "workout": null, "rest": true }
+      ])
     }
-    // ... extend for workouts if needed, or return error JSON
   }
 
   const responses: Record<string, string[]> = {
