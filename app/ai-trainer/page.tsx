@@ -269,9 +269,10 @@ export default function AITrainerPage() {
   const processMessages = useCallback((messages: Message[]) => {
     return messages.map((message, index, array) => {
       const prevMessage = index > 0 ? array[index - 1] : null
-      const isContinuation = prevMessage &&
-        prevMessage.role === message.role &&
+      const isContinuation = prevMessage
+        ? prevMessage.role === message.role &&
         new Date(message.timestamp).getTime() - new Date(prevMessage.timestamp).getTime() < 60000
+        : false
 
       return {
         ...message,
@@ -513,8 +514,8 @@ export default function AITrainerPage() {
   return (
     <div
       className={`min-h-screen bg-gradient-to-br ${theme === "light"
-          ? "from-blue-50 via-purple-50 to-indigo-100"
-          : "from-gray-900 via-indigo-950 to-purple-950"
+        ? "from-blue-50 via-purple-50 to-indigo-100"
+        : "from-gray-900 via-indigo-950 to-purple-950"
         } transition-colors duration-500 ${theme}`}
     >
       <div
