@@ -28,8 +28,12 @@ export async function generateWeeklyPlan() {
         const prompt = `
       Act as an expert fitness trainer. Create a 7-day workout plan for a user with the following profile:
       - Goal: ${user.fitnessGoal || "General Fitness"}
+      - Age: ${user.age || "Unknown"}
+      - Gender: ${user.gender || "Unknown"}
       - Current Weight: ${user.weight || "Unknown"}kg
       - Height: ${user.height || "Unknown"}cm
+      - Workout Days: ${user.workoutDays?.join(", ") || "Any"}
+      - Dietary Preferences: ${user.dietaryPreferences?.join(", ") || "None"}
       
       RECENT FEEDBACK FROM USER (Adapt the plan based on this):
       ${historySummary || "No recent workout history."}
