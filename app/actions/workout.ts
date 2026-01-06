@@ -9,6 +9,8 @@ interface SaveWorkoutParams {
     title: string
     duration: number
     calories: number
+    difficulty?: number
+    notes?: string
 }
 
 export async function saveWorkout(params: SaveWorkoutParams) {
@@ -26,6 +28,8 @@ export async function saveWorkout(params: SaveWorkoutParams) {
                 title: params.title,
                 duration: params.duration,
                 calories: params.calories,
+                difficulty: params.difficulty,
+                notes: params.notes,
             },
         })
 
