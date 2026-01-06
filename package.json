@@ -13,6 +13,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.36.5",
     "@emotion/is-prop-valid": "latest",
     "@google/generative-ai": "latest",
     "@hookform/resolvers": "^3.9.1",
@@ -52,6 +53,7 @@
     "dotenv": "^17.2.3",
     "embla-carousel-react": "8.5.1",
     "framer-motion": "latest",
+    "groq-sdk": "^0.37.0",
     "input-otp": "1.4.1",
     "lucide-react": "^0.503.0",
     "next": "15.2.4",
