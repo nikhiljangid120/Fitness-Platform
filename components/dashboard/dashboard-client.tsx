@@ -7,13 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Calendar } from "@/components/ui/calendar"
-import { Dumbbell, Utensils, BarChart3, CalendarIcon, Trophy, CheckCircle2, Flame } from "lucide-react"
+import { Dumbbell, Utensils, BarChart3, CalendarIcon, Trophy, CheckCircle2, Flame, Loader2, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { workoutCategories } from "@/data/workouts"
 import { mealPlans } from "@/data/nutrition"
 import ProgressChart from "@/components/progress-chart"
 import FitnessTip from "@/components/fitness-tip"
 import { User } from "@prisma/client"
+import { useToast } from "@/hooks/use-toast"
 
 interface DashboardProps {
     user: User | null
@@ -30,6 +31,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
     const [date, setDate] = useState<Date | undefined>(new Date())
     const [waterIntake, setWaterIntake] = useState(3)
     const maxWaterIntake = 8
+    const { toast } = useToast()
 
     // Fallback data if user is missing specific fields
     const userData = {
@@ -42,9 +44,12 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
         startWeight: stats.startWeight,
     }
 
-    // Sample workout plan - tied to category 0 for demo if no dynamic plan yet
-    // TODO: Use real plan from DB when available
-    const workoutPlan = [
+    // AI Plan State
+    const [aiPlan, setAiPlan] = useState<any[] | null>(null)
+    const [isGeneratingPlan, setIsGeneratingPlan] = useState(false)
+
+    // Use AI plan if available, otherwise fallback to static for demo
+    const currentWorkoutPlan = aiPlan || [
         { day: "Monday", workout: workoutCategories[0].workouts[0], completed: true },
         { day: "Tuesday", workout: workoutCategories[2].workouts[1], completed: true },
         { day: "Wednesday", workout: null, completed: false, rest: true },
@@ -53,6 +58,30 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
         { day: "Saturday", workout: workoutCategories[3].workouts[0], completed: false },
         { day: "Sunday", workout: null, completed: false, rest: true },
     ]
+
+    // Handler for generating plan
+    const handleGeneratePlan = async () => {
+        setIsGeneratingPlan(true)
+        toast({ title: "Generating Plan...", description: "Consulting AI Trainer..." })
+
+        try {
+            // Dynamically import action to avoid server component issues in client
+            const { generateWeeklyPlan } = await import("@/app/actions/plan")
+            const result = await generateWeeklyPlan()
+
+            if (result.success && result.plan?.planData) {
+                setAiPlan(result.plan.planData as any[])
+                toast({ title: "Plan Ready!", description: "Your custom workout plan has been created." })
+            } else {
+                toast({ variant: "destructive", title: "Error", description: "Failed to generate plan." })
+            }
+        } catch (e) {
+            console.error(e)
+            toast({ variant: "destructive", title: "Error", description: "Something went wrong." })
+        } finally {
+            setIsGeneratingPlan(false)
+        }
+    }
 
     // Sample meal plan - static for now
     const mealPlan = mealPlans[0]
@@ -146,31 +175,45 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
             </div>
 
             <Tabs defaultValue="workout" className="w-full">
-                <TabsList className="mb-8 flex flex-wrap gap-2 w-full overflow-x-auto pb-1">
-                    <TabsTrigger value="workout" className="flex-1 min-w-[120px] flex items-center gap-2">
-                        <Dumbbell className="h-4 w-4" />
-                        <span className="hidden sm:inline">Workout Plan</span>
-                        <span className="sm:hidden">Workout</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="nutrition" className="flex-1 min-w-[120px] flex items-center gap-2">
-                        <Utensils className="h-4 w-4" />
-                        <span className="hidden sm:inline">Nutrition Plan</span>
-                        <span className="sm:hidden">Nutrition</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="calendar" className="flex-1 min-w-[120px] flex items-center gap-2">
-                        <CalendarIcon className="h-4 w-4" />
-                        <span>Calendar</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="progress" className="flex-1 min-w-[120px] flex items-center gap-2">
-                        <BarChart3 className="h-4 w-4" />
-                        <span>Progress</span>
-                    </TabsTrigger>
-                </TabsList>
+                <div className="flex justify-between items-center mb-8">
+                    <TabsList className="flex flex-wrap gap-2 w-auto overflow-x-auto pb-1">
+                        <TabsTrigger value="workout" className="flex-1 min-w-[120px] flex items-center gap-2">
+                            <Dumbbell className="h-4 w-4" />
+                            <span className="hidden sm:inline">Workout Plan</span>
+                            <span className="sm:hidden">Workout</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="nutrition" className="flex-1 min-w-[120px] flex items-center gap-2">
+                            <Utensils className="h-4 w-4" />
+                            <span className="hidden sm:inline">Nutrition Plan</span>
+                            <span className="sm:hidden">Nutrition</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="calendar" className="flex-1 min-w-[120px] flex items-center gap-2">
+                            <CalendarIcon className="h-4 w-4" />
+                            <span>Calendar</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="progress" className="flex-1 min-w-[120px] flex items-center gap-2">
+                            <BarChart3 className="h-4 w-4" />
+                            <span>Progress</span>
+                        </TabsTrigger>
+                    </TabsList>
+
+                    <Button onClick={handleGeneratePlan} disabled={isGeneratingPlan} variant="outline" className="hidden md:flex gap-2">
+                        {isGeneratingPlan ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-purple-500" />}
+                        {isGeneratingPlan ? "Generating..." : "Generate AI Plan"}
+                    </Button>
+                </div>
 
                 {/* Workout Plan Tab */}
                 <TabsContent value="workout" className="space-y-6">
+                    <div className="md:hidden mb-4">
+                        <Button onClick={handleGeneratePlan} disabled={isGeneratingPlan} variant="outline" className="w-full gap-2">
+                            {isGeneratingPlan ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-purple-500" />}
+                            Generate AI Plan
+                        </Button>
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                        {workoutPlan.map((day, index) => (
+                        {currentWorkoutPlan.map((day, index) => (
                             <Card key={index} className={`workout-card ${day.completed ? "border-green-500" : ""}`}>
                                 <CardHeader>
                                     <div className="flex justify-between items-center">
@@ -193,7 +236,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                             <h3 className="font-semibold mb-2">{day.workout?.title}</h3>
                                             <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{day.workout?.description}</p>
                                             <div className="flex flex-wrap gap-2">
-                                                {day.workout?.equipment.map((item, i) => (
+                                                {day.workout?.equipment.map((item: string, i: number) => (
                                                     <Badge key={i} variant="outline">
                                                         {item}
                                                     </Badge>
