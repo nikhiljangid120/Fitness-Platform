@@ -198,6 +198,8 @@ const WorkoutDetailPage = memo(() => {
       window.speechSynthesis?.cancel()
       setCurrentExerciseIndex(currentExerciseIndex + 1)
       setSeconds(0)
+      setTime(30) // Reset timer
+      setIsPlaying(false) // Pause on manual skip? Or keep playing? Let's pause to let user get ready.
       setTimeout(() => {
         const nextExercise = exercises[currentExerciseIndex + 1]
         speakText(`Next exercise: ${nextExercise.title}`)
@@ -225,11 +227,19 @@ const WorkoutDetailPage = memo(() => {
       })
       setCurrentExerciseIndex((prev) => prev + 1)
       setSeconds(0)
-      setIsPlaying(true)
+      setTime(30) // Reset timer for next exercise
+      setIsPlaying(true) // Keep playing
+
+      // Dynamic Voice Announcement
+      setTimeout(() => {
+        const nextExercise = exercises[currentExerciseIndex + 1]
+        speakText(`Starting ${nextExercise.title}. 30 seconds. Go!`)
+      }, 1000)
+
     } else {
       handleNext()
     }
-  }, [currentExerciseIndex, totalExercises, toast, handleNext])
+  }, [currentExerciseIndex, totalExercises, toast, handleNext, exercises, speakText])
 
   // Timer Logic
   useEffect(() => {
@@ -240,15 +250,14 @@ const WorkoutDetailPage = memo(() => {
         setTime((prev) => prev - 1)
       }, 1000)
     } else if (time === 0 && isPlaying) {
-      if (countDown) {
-        transitionToNextExercise()
-      }
+      // Transition regardless of countDown state when time hits 0
+      transitionToNextExercise()
     }
 
     return () => {
       if (interval) clearInterval(interval)
     }
-  }, [isPlaying, time, countDown, transitionToNextExercise])
+  }, [isPlaying, time, transitionToNextExercise])
 
   const handlePrevious = () => {
     if (currentExerciseIndex > 0) {
