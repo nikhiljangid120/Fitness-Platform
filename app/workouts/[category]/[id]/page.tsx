@@ -35,7 +35,6 @@ import EnhancedTextToSpeech from "@/components/enhanced-text-to-speech"
 import { initVoices, preloadSpeechSynthesis } from "@/lib/speech-synthesis"
 import WorkoutCompletion from "@/components/workout-completion"
 import { workoutCategories } from "@/data/workouts"
-import Confetti from "react-confetti"
 import { saveWorkout } from "@/app/actions/workout"
 
 // Custom useWindowSize hook
