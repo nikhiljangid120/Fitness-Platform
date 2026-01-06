@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import DashboardClient from "@/components/dashboard/dashboard-client"
-import { prisma } from "@/lib/prisma"
+import prisma from "@/lib/prisma"
 
 export default async function MyPlanPage() {
   const user = await getCurrentUser()
