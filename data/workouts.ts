@@ -37,7 +37,7 @@ const exercises: Exercise[] = [
     instructions: "Keep your back straight, lower until elbows are 90°, push back up.",
     level: "Beginner",
     muscleGroup: "Chest, Triceps",
-    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1598971639067-5a6b1c97c934?q=80&w=2070&auto=format&fit=crop",
   },
   {
     id: "squats",
@@ -48,7 +48,7 @@ const exercises: Exercise[] = [
       "Stand with feet shoulder-width apart, lower your hips until thighs are parallel to the floor, then return to standing.",
     level: "Beginner",
     muscleGroup: "Quadriceps, Glutes",
-    image: "/exercises/squats.gif",
+    image: "https://images.unsplash.com/photo-1574680096141-1cddd32e0340?q=80&w=2069&auto=format&fit=crop",
   },
   {
     id: "lunges",
@@ -58,7 +58,7 @@ const exercises: Exercise[] = [
     instructions: "Step forward with one leg, lowering your hips until both knees are bent at about a 90-degree angle.",
     level: "Beginner",
     muscleGroup: "Quadriceps, Hamstrings, Glutes",
-    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
   },
   {
     id: "plank",
@@ -68,7 +68,7 @@ const exercises: Exercise[] = [
     instructions: "Hold a push-up position with your weight on your forearms, keeping your body in a straight line.",
     level: "Beginner",
     muscleGroup: "Core, Shoulders",
-    image: "/exercises/plank.gif",
+    image: "https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?q=80&w=2016&auto=format&fit=crop",
   },
   {
     id: "burpees",
@@ -79,7 +79,7 @@ const exercises: Exercise[] = [
       "Begin in a standing position, drop into a squat position, kick feet back, do a push-up, return to squat, and jump up.",
     level: "Intermediate",
     muscleGroup: "Full Body",
-    image: "/exercises/burpees.gif",
+    image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop",
   },
   {
     id: "mountain-climbers",
@@ -89,7 +89,7 @@ const exercises: Exercise[] = [
     instructions: "Start in a plank position and alternate bringing knees to chest in a running motion.",
     level: "Intermediate",
     muscleGroup: "Core, Shoulders, Legs",
-    image: "/exercises/mountain-climbers.gif",
+    image: "https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=2025&auto=format&fit=crop",
   },
   {
     id: "dumbbell-rows",
@@ -147,7 +147,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Intermediate",
         duration: "30 min",
         equipment: ["No Equipment"],
-        image: "/workouts/hiit-fat-burn.jpg",
+        image: "https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=2025&auto=format&fit=crop",
         exercises: [exercises[4], exercises[5], exercises[2], exercises[0], exercises[3]],
       },
       {
@@ -157,7 +157,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Beginner",
         duration: "25 min",
         equipment: ["No Equipment"],
-        image: "/workouts/cardio-blast.jpg",
+        image: "https://images.unsplash.com/photo-1552674605-46d536d0d6fb?q=80&w=2070&auto=format&fit=crop",
         exercises: [exercises[4], exercises[5], exercises[1], exercises[2]],
       },
       {
@@ -167,7 +167,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Intermediate",
         duration: "45 min",
         equipment: ["Dumbbells"],
-        image: "/workouts/full-body-burn.jpg",
+        image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop",
         exercises: [exercises[0], exercises[1], exercises[6], exercises[4], exercises[3]],
       },
     ],
@@ -184,7 +184,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Intermediate",
         duration: "50 min",
         equipment: ["Dumbbells", "Bench"],
-        image: "/workouts/upper-body-strength.jpg",
+        image: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070&auto=format&fit=crop",
         exercises: [exercises[7], exercises[6], exercises[0], exercises[9]],
       },
       {
@@ -194,7 +194,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Intermediate",
         duration: "45 min",
         equipment: ["Barbell", "Dumbbells"],
-        image: "/workouts/lower-body-power.jpg",
+        image: "https://images.unsplash.com/photo-1574680096141-1cddd32e0340?q=80&w=2069&auto=format&fit=crop",
         exercises: [exercises[8], exercises[1], exercises[2]],
       },
       {
@@ -204,7 +204,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Advanced",
         duration: "60 min",
         equipment: ["Barbell", "Dumbbells", "Bench"],
-        image: "/workouts/full-body-strength.jpg",
+        image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop",
         exercises: [exercises[7], exercises[8], exercises[6], exercises[1], exercises[9]],
       },
     ],
@@ -221,7 +221,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Beginner",
         duration: "20 min",
         equipment: ["No Equipment"],
-        image: "/workouts/beginner-cardio.jpg",
+        image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop",
         exercises: [exercises[1], exercises[2], exercises[5]],
       },
       {
@@ -231,7 +231,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Intermediate",
         duration: "30 min",
         equipment: ["No Equipment"],
-        image: "/workouts/interval-training.jpg",
+        image: "https://images.unsplash.com/photo-1627483297886-49710ae1fc28?q=80&w=2070&auto=format&fit=crop",
         exercises: [exercises[4], exercises[5], exercises[0], exercises[3]],
       },
       {
@@ -241,7 +241,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Advanced",
         duration: "45 min",
         equipment: ["No Equipment"],
-        image: "/workouts/endurance-builder.jpg",
+        image: "https://images.unsplash.com/photo-1552674605-46d536d0d6fb?q=80&w=2070&auto=format&fit=crop",
         exercises: [exercises[4], exercises[5], exercises[2], exercises[0], exercises[3]],
       },
     ],
@@ -258,7 +258,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Beginner",
         duration: "20 min",
         equipment: ["Yoga Mat"],
-        image: "/workouts/morning-yoga.jpg",
+        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
         exercises: [
           {
             id: "sun-salutation",
@@ -269,7 +269,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Begin in mountain pose, then flow through upward salute, forward fold, plank, chaturanga, upward dog, downward dog, and back to mountain pose.",
             level: "Beginner",
             muscleGroup: "Full Body",
-            image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
           },
           {
             id: "warrior-1",
@@ -301,7 +301,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Stand on one leg, place the sole of your other foot on your inner thigh, and bring your hands to prayer position.",
             level: "Beginner",
             muscleGroup: "Legs, Core, Balance",
-            image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
           },
         ],
       },
@@ -312,7 +312,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Intermediate",
         duration: "30 min",
         equipment: ["Yoga Mat"],
-        image: "/workouts/flexibility-routine.jpg",
+        image: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=2026&auto=format&fit=crop",
         exercises: [
           {
             id: "forward-fold",
@@ -334,7 +334,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "From downward dog, bring one knee forward behind your wrist, extend the other leg back, and fold forward over your bent leg.",
             level: "Intermediate",
             muscleGroup: "Hips, Glutes",
-            image: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=2026&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=2069&auto=format&fit=crop",
           },
           {
             id: "butterfly-stretch",
@@ -377,7 +377,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Advanced",
         duration: "45 min",
         equipment: ["Yoga Mat"],
-        image: "/workouts/power-yoga.jpg",
+        image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
         exercises: [
           {
             id: "sun-salutation-b",
@@ -397,7 +397,7 @@ export const workoutCategories: WorkoutCategory[] = [
             instructions: "From plank position, lower halfway down like a push-up, keeping elbows close to your body.",
             level: "Intermediate",
             muscleGroup: "Chest, Arms, Core",
-            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop",
           },
           {
             id: "side-plank",
@@ -408,7 +408,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "From plank position, shift weight to one arm, stack feet, and lift other arm toward ceiling.",
             level: "Intermediate",
             muscleGroup: "Core, Shoulders",
-            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?q=80&w=2016&auto=format&fit=crop",
           },
           {
             id: "boat-pose",
@@ -430,7 +430,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Squat down, place hands on floor, knees on upper arms, and shift weight forward until feet lift off floor.",
             level: "Advanced",
             muscleGroup: "Arms, Core, Balance",
-            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop",
           },
         ],
       },
@@ -448,7 +448,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Beginner",
         duration: "15 min",
         equipment: ["No Equipment"],
-        image: "/workouts/quick-hiit.jpg",
+        image: "https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=2025&auto=format&fit=crop",
         exercises: [exercises[4], exercises[5], exercises[0]],
       },
       {
@@ -458,7 +458,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Intermediate",
         duration: "25 min",
         equipment: ["No Equipment"],
-        image: "/workouts/tabata-workout.jpg",
+        image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop",
         exercises: [exercises[4], exercises[1], exercises[5], exercises[0]],
       },
       {
@@ -468,7 +468,7 @@ export const workoutCategories: WorkoutCategory[] = [
         level: "Advanced",
         duration: "35 min",
         equipment: ["Dumbbells"],
-        image: "/workouts/advanced-hiit.jpg",
+        image: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070&auto=format&fit=crop",
         exercises: [exercises[4], exercises[6], exercises[5], exercises[1], exercises[0]],
       },
     ],
