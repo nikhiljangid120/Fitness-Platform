@@ -380,21 +380,21 @@ export default function FitnessCalculator() {
               </form>
 
               {tdeeResult !== null && (
-                <div className="mt-6 p-4 bg-primary/10 rounded-lg">
+                <div className="mt-6 p-4 bg-muted/50 rounded-lg">
                   <h3 className="font-semibold text-lg mb-2">Your Results</h3>
                   <div className="text-center">
                     <p className="text-sm text-muted-foreground">Your Daily Calorie Needs</p>
                     <p className="text-3xl font-bold">{tdeeResult} calories</p>
                     <div className="grid grid-cols-3 gap-2 mt-4 text-sm">
-                      <div className="bg-white dark:bg-gray-800 p-2 rounded">
+                      <div className="bg-background p-2 rounded shadow-sm">
                         <p className="text-muted-foreground">Weight Loss</p>
                         <p className="font-semibold">{tdeeResult - 500} cal</p>
                       </div>
-                      <div className="bg-white dark:bg-gray-800 p-2 rounded">
+                      <div className="bg-background p-2 rounded shadow-sm">
                         <p className="text-muted-foreground">Maintenance</p>
                         <p className="font-semibold">{tdeeResult} cal</p>
                       </div>
-                      <div className="bg-white dark:bg-gray-800 p-2 rounded">
+                      <div className="bg-background p-2 rounded shadow-sm">
                         <p className="text-muted-foreground">Weight Gain</p>
                         <p className="font-semibold">{tdeeResult + 500} cal</p>
                       </div>
@@ -468,27 +468,27 @@ export default function FitnessCalculator() {
               </form>
 
               {macrosResult !== null && (
-                <div className="mt-6 p-4 bg-primary/10 rounded-lg">
+                <div className="mt-6 p-4 bg-muted/50 rounded-lg">
                   <h3 className="font-semibold text-lg mb-2">Your Daily Macros</h3>
                   <div className="grid grid-cols-3 gap-4 text-center">
-                    <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                      <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-2">
+                    <div className="bg-background p-3 rounded-lg shadow-sm">
+                      <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-2">
                         <span className="text-red-500 font-semibold">P</span>
                       </div>
                       <p className="text-sm text-muted-foreground">Protein</p>
                       <p className="text-xl font-bold">{macrosResult.protein}g</p>
                       <p className="text-xs text-muted-foreground">{Math.round(macrosResult.protein * 4)} calories</p>
                     </div>
-                    <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                      <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+                    <div className="bg-background p-3 rounded-lg shadow-sm">
+                      <div className="w-8 h-8 rounded-full bg-yellow-500/10 flex items-center justify-center mx-auto mb-2">
                         <span className="text-yellow-500 font-semibold">C</span>
                       </div>
                       <p className="text-sm text-muted-foreground">Carbs</p>
                       <p className="text-xl font-bold">{macrosResult.carbs}g</p>
                       <p className="text-xs text-muted-foreground">{Math.round(macrosResult.carbs * 4)} calories</p>
                     </div>
-                    <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                    <div className="bg-background p-3 rounded-lg shadow-sm">
+                      <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center mx-auto mb-2">
                         <span className="text-blue-500 font-semibold">F</span>
                       </div>
                       <p className="text-sm text-muted-foreground">Fat</p>

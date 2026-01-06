@@ -840,8 +840,8 @@ export default function Home() {
                         src={testimonial.image || "/placeholder.svg"}
                         alt={testimonial.name}
                         className={`w-full h-full object-cover object-center transition-transform duration-500 ${testimonial.name === "Govind Goyal"
-                            ? "scale-125 group-hover:scale-150"
-                            : ""
+                          ? "scale-125 group-hover:scale-150"
+                          : ""
                           }`}
                       />
                       {/* Halo Ping Animation */}
@@ -1094,11 +1094,11 @@ function FeatureCard({
 }) {
   return (
     <Link href={href}>
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-2 hover:scale-105 group">
+      <div className="bg-card border border-border rounded-2xl p-6 h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-2 hover:scale-105 group">
         <div className="mb-4 w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all duration-300 group-hover:scale-110">
           {icon}
         </div>
-        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        <h3 className="text-xl font-semibold mb-2 text-card-foreground">{title}</h3>
         <p className="text-muted-foreground">{description}</p>
         <div className="mt-4 flex items-center text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Learn More <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
