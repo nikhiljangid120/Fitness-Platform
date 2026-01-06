@@ -198,8 +198,9 @@ const WorkoutDetailPage = memo(() => {
       window.speechSynthesis?.cancel()
       setCurrentExerciseIndex(currentExerciseIndex + 1)
       setSeconds(0)
-      setTime(30) // Reset timer
-      setIsPlaying(false) // Pause on manual skip? Or keep playing? Let's pause to let user get ready.
+      setTime(45) // Reset timer
+      setCountDown(false) // Force Work mode
+      setIsPlaying(false) // Pause on manual skip
       setTimeout(() => {
         const nextExercise = exercises[currentExerciseIndex + 1]
         speakText(`Next exercise: ${nextExercise.title}`)
@@ -218,30 +219,26 @@ const WorkoutDetailPage = memo(() => {
     }
   }, [currentExerciseIndex, totalExercises, speakText, exercises, toast])
 
-  const transitionToNextExercise = useCallback(() => {
+  const advanceToNextExercise = useCallback(() => {
     if (currentExerciseIndex < totalExercises - 1) {
       window.speechSynthesis?.cancel()
-      toast({
-        title: "Exercise Complete!",
-        description: "Moving to the next exercise...",
-      })
       setCurrentExerciseIndex((prev) => prev + 1)
       setSeconds(0)
-      setTime(30) // Reset timer for next exercise
-      setIsPlaying(true) // Keep playing
+      setTime(45) // Default Work Duration (Premium standard)
+      setCountDown(false) // Ensure we are in Work mode
+      setIsPlaying(true)
 
-      // Dynamic Voice Announcement
       setTimeout(() => {
         const nextExercise = exercises[currentExerciseIndex + 1]
-        speakText(`Starting ${nextExercise.title}. 30 seconds. Go!`)
-      }, 1000)
+        speakText(`Start ${nextExercise.title}`)
+      }, 500)
 
     } else {
       handleNext()
     }
-  }, [currentExerciseIndex, totalExercises, toast, handleNext, exercises, speakText])
+  }, [currentExerciseIndex, totalExercises, handleNext, exercises, speakText])
 
-  // Timer Logic
+  // Timer Logic with Work/Rest Cycle
   useEffect(() => {
     let interval: NodeJS.Timeout
 
@@ -250,14 +247,25 @@ const WorkoutDetailPage = memo(() => {
         setTime((prev) => prev - 1)
       }, 1000)
     } else if (time === 0 && isPlaying) {
-      // Transition regardless of countDown state when time hits 0
-      transitionToNextExercise()
+      if (!countDown) {
+        // Work Phase Finished -> Start Rest
+        setCountDown(true)
+        setTime(15) // 15s Rest
+        toast({
+          title: "Rest",
+          description: "Take a breather!",
+        })
+        speakText("Rest for 15 seconds")
+      } else {
+        // Rest Phase Finished -> Next Exercise
+        advanceToNextExercise()
+      }
     }
 
     return () => {
       if (interval) clearInterval(interval)
     }
-  }, [isPlaying, time, transitionToNextExercise])
+  }, [isPlaying, time, countDown, advanceToNextExercise, speakText, toast])
 
   const handlePrevious = () => {
     if (currentExerciseIndex > 0) {
@@ -621,7 +629,8 @@ const WorkoutDetailPage = memo(() => {
                 onClick={() => {
                   setCurrentExerciseIndex(index)
                   setSeconds(0)
-                  setTime(30) // Reset timer to default or parsed duration
+                  setTime(45) // Reset timer to default or parsed duration
+                  setCountDown(false)
                   setIsPlaying(false)
                 }}
                 role="button"
