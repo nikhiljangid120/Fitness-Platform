@@ -780,50 +780,52 @@ const WorkoutDetailPage = memo(() => {
         </div>
       </motion.div>
 
+    </div> {/* Close Right Col */ }
+      </div > {/* Close Grid */ }
 
+{/* Close Main Container motion.div happens at the end */ }
+
+<Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
+  <DialogContent className="sm:max-w-md">
+    <DialogHeader>
+      <DialogTitle>Workout Complete!</DialogTitle>
+      <DialogDescription>
+        Great job! How was the workout?
+      </DialogDescription>
+    </DialogHeader>
+    <div className="grid gap-6 py-4">
+      <div className="grid gap-2">
+        <Label>Difficulty: {difficulty[0]}/10</Label>
+        <Slider
+          defaultValue={[5]}
+          max={10}
+          min={1}
+          step={1}
+          value={difficulty}
+          onValueChange={setDifficulty}
+          className="py-4"
+        />
+        <div className="flex justify-between text-xs text-muted-foreground">
+          <span>Too Easy</span>
+          <span>Perfect</span>
+          <span>Too Hard</span>
+        </div>
       </div>
-
-      <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Workout Complete!</DialogTitle>
-            <DialogDescription>
-              Great job! How was the workout?
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-6 py-4">
-            <div className="grid gap-2">
-              <Label>Difficulty: {difficulty[0]}/10</Label>
-              <Slider
-                defaultValue={[5]}
-                max={10}
-                min={1}
-                step={1}
-                value={difficulty}
-                onValueChange={setDifficulty}
-                className="py-4"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Too Easy</span>
-                <span>Perfect</span>
-                <span>Too Hard</span>
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="notes">Notes (Optional)</Label>
-              <Textarea
-                id="notes"
-                placeholder="How did you feel? Any pain or personal bests?"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-             <Button onClick={handleSaveWithFeedback} className="w-full">Save Workout</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <div className="grid gap-2">
+        <Label htmlFor="notes">Notes (Optional)</Label>
+        <Textarea
+          id="notes"
+          placeholder="How did you feel? Any pain or personal bests?"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+      </div>
+    </div>
+    <DialogFooter>
+      <Button onClick={handleSaveWithFeedback} className="w-full">Save Workout</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
     
     </motion.div >
   )

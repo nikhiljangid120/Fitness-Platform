@@ -13,12 +13,26 @@ export async function generateWeeklyPlan() {
     }
 
     try {
-        // 1. Construct prompt based on user profile
+        // 1. Fetch User History for Adaptation
+        const recentWorkouts = await prisma.completedWorkout.findMany({
+            where: { userId: user.id },
+            orderBy: { completedAt: 'desc' },
+            take: 5
+        })
+
+        const historySummary = recentWorkouts.map(w =>
+            `- ${w.title}: Rated ${w.difficulty || "N/A"}/10 (${w.notes || "No notes"})`
+        ).join("\n")
+
+        // 2. Construct prompt based on user profile and history
         const prompt = `
       Act as an expert fitness trainer. Create a 7-day workout plan for a user with the following profile:
       - Goal: ${user.fitnessGoal || "General Fitness"}
       - Current Weight: ${user.weight || "Unknown"}kg
       - Height: ${user.height || "Unknown"}cm
+      
+      RECENT FEEDBACK FROM USER (Adapt the plan based on this):
+      ${historySummary || "No recent workout history."}
       
       Return ONLY valid JSON. The format must be an array of 7 objects, where each object represents a day:
       [
