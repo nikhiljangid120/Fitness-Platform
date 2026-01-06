@@ -74,8 +74,8 @@ const WorkoutDetailPage = memo(() => {
   const [caloriesBurned, setCaloriesBurned] = useState(0)
   const [heartRate, setHeartRate] = useState({ current: 75, max: 0, avg: 0 })
   const [intensity, setIntensity] = useState(50)
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [intensity, setIntensity] = useState(50)
+  // Audio state removed
   const [time, setTime] = useState(60)
   const [countDown, setCountDown] = useState(true)
 
@@ -83,6 +83,8 @@ const WorkoutDetailPage = memo(() => {
     initVoices()
     preloadSpeechSynthesis()
   }, [])
+
+  // Removed broken audio initialization
 
   // Removed broken audio initialization to prevent "element has no supported sources" error
 
@@ -334,15 +336,7 @@ const WorkoutDetailPage = memo(() => {
             </Button>
 
             <div className="flex gap-2">
-              <Button
-                onClick={toggleAudio}
-                variant="ghost"
-                size="icon"
-                className="text-white hover:bg-white/20 hover:text-white backdrop-blur-sm rounded-full"
-                aria-label={isAudioPlaying ? "Pause Audio" : "Play Audio"}
-              >
-                {isAudioPlaying ? <Volume2 className="h-5 w-5" /> : <div className="relative"><Volume2 className="h-5 w-5 opacity-50" /><div className="absolute inset-0 h-[2px] w-full bg-white top-1/2 -rotate-45" /></div>}
-              </Button>
+              {/* Audio toggle removed */}
             </div>
           </div>
 
