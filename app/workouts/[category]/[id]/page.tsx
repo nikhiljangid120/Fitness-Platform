@@ -342,7 +342,7 @@ const WorkoutDetailPage = memo(() => {
     "Push your limits, achieve greatness.",
   ]
 
-  const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)]
+  const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
 
   const getExerciseTips = useCallback(() => {
     const tips = [
