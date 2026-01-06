@@ -84,29 +84,7 @@ const WorkoutDetailPage = memo(() => {
     preloadSpeechSynthesis()
   }, [])
 
-  useEffect(() => {
-    try {
-      const audio = new Audio("/audio/workout-motivation.mp3")
-      audio.loop = true
-
-      // Add error listener
-      audio.onerror = (e) => {
-        console.warn("Audio file not found or failed to load:", e)
-        setIsAudioPlaying(false)
-      }
-
-      audioRef.current = audio
-    } catch (error) {
-      console.warn("Failed to initialize audio:", error)
-    }
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current = null
-      }
-    }
-  }, [])
+  // Removed broken audio initialization to prevent "element has no supported sources" error
 
   const category = workoutCategories.find((c) => c.id === params.category)
   const workout = category?.workouts.find((w) => w.id === params.id)
@@ -227,7 +205,7 @@ const WorkoutDetailPage = memo(() => {
       setIsPlaying(false)
       setShowCompletionModal(true)
       setIsAudioPlaying(false)
-      audioRef.current?.pause()
+      // audio cleanup removed
       toast({
         title: "Workout Complete!",
         description: "Great job! Share your achievement with the FlexForge community!",
@@ -260,11 +238,6 @@ const WorkoutDetailPage = memo(() => {
 
   const handlePlayPause = () => {
     setIsPlaying((prev) => !prev)
-    if (!isPlaying && isAudioPlaying) {
-      audioRef.current?.play()
-    } else {
-      audioRef.current?.pause()
-    }
   }
 
   const handleReset = () => {
@@ -276,21 +249,9 @@ const WorkoutDetailPage = memo(() => {
     setHeartRate({ current: 75, max: 0, avg: 0 })
     setIntensity(50)
     setIsAudioPlaying(false)
-    audioRef.current?.pause()
   }
 
-  const toggleAudio = () => {
-    if (!audioRef.current) return
-
-    setIsAudioPlaying((prev) => {
-      if (!prev) {
-        audioRef.current?.play().catch(e => console.warn("Play failed:", e))
-      } else {
-        audioRef.current?.pause()
-      }
-      return !prev
-    })
-  }
+  // toggleAudio function removed
 
   const motivationalQuotes = [
     "Transform your body, transform your life with FlexForge!",
