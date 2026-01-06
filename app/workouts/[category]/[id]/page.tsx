@@ -347,9 +347,7 @@ const WorkoutDetailPage = memo(() => {
 
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <div
       className="min-h-screen bg-background pb-20"
       role="main"
       aria-label="FlexForge Workout Detail Page"
@@ -799,7 +797,7 @@ const WorkoutDetailPage = memo(() => {
   </DialogContent>
 </Dialog>
 
-    </motion.div >
+    </div >
   )
 })
 
