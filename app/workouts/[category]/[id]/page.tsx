@@ -769,12 +769,10 @@ const WorkoutDetailPage = memo(() => {
           </div>
         </div>
       </motion.div>
+    </div> {/* End Right Column */ }
+    </div > {/* End Grid */ }
 
-    </div> {/* Close Right Col */ }
-      </div > {/* Close Grid */ }
-
-{/* Close Main Container motion.div happens at the end */ }
-
+{/* Feedback Dialog */ }
 <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
   <DialogContent className="sm:max-w-md">
     <DialogHeader>
@@ -816,7 +814,7 @@ const WorkoutDetailPage = memo(() => {
     </DialogFooter>
   </DialogContent>
 </Dialog>
-    
+
     </motion.div >
   )
 })
