@@ -11,6 +11,7 @@ import { Dumbbell, Utensils, BarChart3, CalendarIcon, Trophy, CheckCircle2, Flam
 import Link from "next/link"
 import { workoutCategories } from "@/data/workouts"
 import { mealPlans } from "@/data/nutrition"
+import { getImageForKeyword } from "@/lib/image-mapper"
 import ProgressChart from "@/components/progress-chart"
 import FitnessTip from "@/components/fitness-tip"
 import { User } from "@prisma/client"
@@ -241,53 +242,73 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                        {currentWorkoutPlan.map((day, index) => (
-                            <Card key={index} className={`workout-card ${day.completed ? "border-green-500" : ""}`}>
-                                <CardHeader>
-                                    <div className="flex justify-between items-center">
-                                        <CardTitle>{day.day}</CardTitle>
-                                        {day.completed && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+                        {currentWorkoutPlan.map((day, index) => {
+                            // Determine image for the day's workout
+                            const workoutImage = day.workout
+                                ? day.workout.image || getImageForKeyword(day.workout.title)
+                                : getImageForKeyword("rest")
+
+                            return (
+                                <Card key={index} className={`workout-card overflow-hidden group relative ${day.completed ? "border-green-500" : ""}`}>
+                                    {/* Image Background for Card Header */}
+                                    <div className="absolute inset-0 h-32 w-full z-0">
+                                        <img
+                                            src={workoutImage}
+                                            alt={day.day}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
                                     </div>
-                                    {day.rest ? (
-                                        <CardDescription>Rest Day</CardDescription>
-                                    ) : (
-                                        <CardDescription>
-                                            {day.workout?.level} • {day.workout?.duration}
-                                        </CardDescription>
-                                    )}
-                                </CardHeader>
-                                <CardContent>
-                                    {day.rest ? (
-                                        <p className="text-muted-foreground">Take time to recover and recharge.</p>
-                                    ) : (
-                                        <>
-                                            <h3 className="font-semibold mb-2">{day.workout?.title}</h3>
-                                            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{day.workout?.description}</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {day.workout?.equipment.map((item: string, i: number) => (
-                                                    <Badge key={i} variant="outline">
-                                                        {item}
-                                                    </Badge>
-                                                ))}
-                                            </div>
-                                        </>
-                                    )}
-                                </CardContent>
-                                <CardFooter>
-                                    {!day.rest && (
-                                        <Button
-                                            asChild
-                                            variant={day.completed ? "outline" : "default"}
-                                            className={`w-full ${!day.completed ? "bg-primary hover:bg-primary/90" : ""}`}
-                                        >
-                                            <Link href={day.workout ? `/workouts/${day.workout.id}` : "#"}>
-                                                {day.completed ? "View Details" : "Start Workout"}
-                                            </Link>
-                                        </Button>
-                                    )}
-                                </CardFooter>
-                            </Card>
-                        ))}
+
+                                    <CardHeader className="relative z-10 pt-20">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <Badge variant={day.rest ? "secondary" : "default"} className="shadow-sm">
+                                                {day.day}
+                                            </Badge>
+                                            {day.completed && <CheckCircle2 className="h-5 w-5 text-green-500 bg-background rounded-full" />}
+                                        </div>
+                                        {day.rest ? (
+                                            <CardTitle className="text-xl">Rest & Recovery</CardTitle>
+                                        ) : (
+                                            <CardTitle className="text-lg line-clamp-1">{day.workout?.title}</CardTitle>
+                                        )}
+                                    </CardHeader>
+                                    <CardContent className="relative z-10 -mt-2">
+                                        {day.rest ? (
+                                            <p className="text-muted-foreground text-sm">Take time to recover and recharge.</p>
+                                        ) : (
+                                            <>
+                                                <p className="text-xs text-muted-foreground mb-2 flex items-center gap-2">
+                                                    <Badge variant="outline" className="text-[10px] h-5">{day.workout?.level}</Badge>
+                                                    <span>• {day.workout?.duration}</span>
+                                                </p>
+                                                <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{day.workout?.description}</p>
+                                                <div className="flex flex-wrap gap-1">
+                                                    {day.workout?.equipment.slice(0, 3).map((item: string, i: number) => (
+                                                        <span key={i} className="text-[10px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground">
+                                                            {item}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </>
+                                        )}
+                                    </CardContent>
+                                    <CardFooter className="relative z-10 pt-0">
+                                        {!day.rest && (
+                                            <Button
+                                                asChild
+                                                variant={day.completed ? "outline" : "default"}
+                                                className={`w-full ${!day.completed ? "bg-primary hover:bg-primary/90" : ""}`}
+                                            >
+                                                <Link href={day.workout ? `/workouts/${day.workout.id}` : "#"}>
+                                                    {day.completed ? "View Details" : "Start Workout"}
+                                                </Link>
+                                            </Button>
+                                        )}
+                                    </CardFooter>
+                                </Card>
+                            )
+                        })}
                     </div>
                 </TabsContent>
 
