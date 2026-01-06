@@ -27,15 +27,14 @@ export async function saveOnboardingData(data: {
             where: { id: user.id },
             data: {
                 name: data.name,
+                age: parseInt(data.age) || null,
+                gender: data.gender,
                 height: parseFloat(data.height),
                 weight: parseFloat(data.weight),
                 fitnessGoal: data.goal,
                 activityLevel: data.fitnessLevel,
-                // We might want to store age, gender, workoutDays, dietaryPreferences 
-                // in a separate Profile model or as JSON if the User model doesn't support them.
-                // For now, based on the schema I saw earlier, User model has minimal fields.
-                // Let's check schema/view mapping again or just add them to schema if needed.
-                // Waiting to see schema first, but assuming I can map what exists.
+                workoutDays: data.workoutDays,
+                dietaryPreferences: data.dietaryPreferences,
             }
         })
 

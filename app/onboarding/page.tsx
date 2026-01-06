@@ -46,8 +46,18 @@ export default function OnboardingPage() {
     if (step < 4) {
       setStep(step + 1)
     } else {
-      toast({ title: "All set!", description: "Redirecting to your dashboard..." })
-      setTimeout(() => router.push("/my-plan"), 1500)
+      toast({ title: "Saving Profile...", description: "Just a moment." })
+      // Call server action
+      import("@/app/actions/user").then(({ saveOnboardingData }) => {
+        saveOnboardingData(formData).then((res) => {
+          if (res.success) {
+            toast({ title: "All set!", description: "Redirecting to your dashboard..." })
+            setTimeout(() => router.push("/my-plan"), 1500)
+          } else {
+            toast({ title: "Error", description: "Failed to save profile. Please try again.", variant: "destructive" })
+          }
+        })
+      })
     }
   }
 
