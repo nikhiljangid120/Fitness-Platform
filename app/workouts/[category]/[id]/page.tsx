@@ -344,23 +344,7 @@ const WorkoutDetailPage = memo(() => {
 
   const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
 
-  const getExerciseTips = useCallback(() => {
-    const tips = [
-      "Breathe steadily to maintain energy.",
-      "Engage your core for better stability.",
-      "Focus on form to maximize results.",
-      "Stay hydrated to perform at your best.",
-      "Adjust intensity with FlexForge’s AI trainer for optimal gains.",
-    ];
-    if (currentExercise?.title?.toLowerCase().includes("squat")) {
-      tips.push("Keep knees aligned with toes for safety.");
-    } else if (currentExercise?.title?.toLowerCase().includes("push")) {
-      tips.push("Maintain a 45-degree elbow angle.");
-    } else if (currentExercise?.title?.toLowerCase().includes("plank")) {
-      tips.push("Keep hips level with shoulders.");
-    }
-    return tips[Math.floor(Math.random() * tips.length)];
-  }, [currentExercise]);
+
 
   return (
     <motion.div
