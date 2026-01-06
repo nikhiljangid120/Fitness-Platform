@@ -278,10 +278,10 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                             <p className="text-muted-foreground text-sm">Take time to recover and recharge.</p>
                                         ) : (
                                             <>
-                                                <p className="text-xs text-muted-foreground mb-2 flex items-center gap-2">
+                                                <div className="text-xs text-muted-foreground mb-2 flex items-center gap-2">
                                                     <Badge variant="outline" className="text-[10px] h-5">{day.workout?.level}</Badge>
                                                     <span>• {day.workout?.duration}</span>
-                                                </p>
+                                                </div>
                                                 <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{day.workout?.description}</p>
                                                 <div className="flex flex-wrap gap-1">
                                                     {day.workout?.equipment.slice(0, 3).map((item: string, i: number) => (
