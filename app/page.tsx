@@ -27,7 +27,6 @@ import FitnessTip from "@/components/fitness-tip"
 import WorkoutOfTheDay from "@/components/workout-of-the-day"
 import FitnessCalculator from "@/components/fitness-calculator"
 import { useState, useEffect } from "react"
-
 export default function Home() {
   // Add animated counter state
   const [counts, setCounts] = useState({
