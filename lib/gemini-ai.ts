@@ -33,11 +33,13 @@ export async function generateAIResponse(prompt: string): Promise<string> {
       const cleanedResponse = cleanResponse(data.response)
 
       // We have a valid response
-      console.log("Successfully received API response")
+      console.log("✅ GEMINI API SUCCESS: Response received")
       return cleanedResponse
     } catch (fetchError) {
       clearTimeout(timeoutId)
-      console.error("Fetch error:", fetchError)
+      console.error("❌ GEMINI API FETCH ERROR:", fetchError)
+
+      // Only fallback if absolutely necessary
       return getFallbackResponse(prompt)
     }
   } catch (error) {
