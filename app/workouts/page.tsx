@@ -109,7 +109,9 @@ function WorkoutCard({ title, description, level, duration, category, image, hre
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link href={href}>View Workout</Link>
+          <Link href={href} className="w-full h-full flex items-center justify-center text-primary-foreground hover:text-primary-foreground">
+            View Workout
+          </Link>
         </Button>
       </CardFooter>
     </Card>
