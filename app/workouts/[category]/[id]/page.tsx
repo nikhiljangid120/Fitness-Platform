@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea"
 import {
   Clock,
   Dumbbell,
+} from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import WorkoutTimer from "@/components/workout-timer"
 import EnhancedTextToSpeech from "@/components/enhanced-text-to-speech"
