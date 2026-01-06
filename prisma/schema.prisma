@@ -20,6 +20,10 @@ model User {
   targetWeight   Float?    // stored in kg
   fitnessGoal    String?   // e.g., "WEIGHT_LOSS", "MUSCLE_GAIN"
   activityLevel  String?
+  age            Int?
+  gender         String?
+  workoutDays    String[]  @default([])
+  dietaryPreferences String[] @default([])
   
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
