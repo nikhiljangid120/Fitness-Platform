@@ -83,8 +83,36 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
         }
     }
 
-    // Sample meal plan - static for now
-    const mealPlan = mealPlans[0]
+    // AI Meal Plan State
+    const [aiMealPlan, setAiMealPlan] = useState<any | null>(null)
+    const [isGeneratingMealPlan, setIsGeneratingMealPlan] = useState(false)
+
+    const currentMealPlan = aiMealPlan || mealPlans[0]
+
+    const handleGenerateMealPlan = async () => {
+        setIsGeneratingMealPlan(true)
+        toast({ title: "Designing your menu...", description: "Consulting AI Nutritionist..." })
+
+        try {
+            // Dynamically import action
+            const { generateMealPlan } = await import("@/app/actions/nutrition")
+            const result = await generateMealPlan()
+
+            if (result.success && result.plan?.planData) {
+                setAiMealPlan(result.plan.planData)
+                toast({ title: "Bon Appétit!", description: "Your custom meal plan is ready." })
+            } else {
+                toast({ variant: "destructive", title: "Error", description: "Failed to create meal plan." })
+            }
+        } catch (e) {
+            console.error(e)
+            toast({ variant: "destructive", title: "Error", description: "Something went wrong." })
+        } finally {
+            setIsGeneratingMealPlan(false)
+        }
+    }
+
+    // Calculate progress percentage
 
     // Calculate progress percentage
     const weightLossProgress = Math.max(0, Math.min(100, Math.round(
@@ -267,19 +295,27 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                 <TabsContent value="nutrition" className="space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>{mealPlan.title}</CardTitle>
-                            <CardDescription>
-                                {mealPlan.diet} • Approx. {mealPlan.calories} calories per day
-                            </CardDescription>
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <CardTitle>{currentMealPlan.title}</CardTitle>
+                                    <CardDescription>
+                                        {currentMealPlan.diet} • Approx. {currentMealPlan.calories} calories per day
+                                    </CardDescription>
+                                </div>
+                                <Button onClick={handleGenerateMealPlan} disabled={isGeneratingMealPlan} variant="outline" size="sm" className="gap-2">
+                                    {isGeneratingMealPlan ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-green-500" />}
+                                    Generate
+                                </Button>
+                            </div>
                         </CardHeader>
                         <CardContent>
-                            <p className="mb-4">{mealPlan.description}</p>
+                            <p className="mb-4">{currentMealPlan.description}</p>
 
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-lg font-semibold mb-3">Breakfast Options</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {mealPlan.meals.breakfast.map((meal, index) => (
+                                        {currentMealPlan.meals.breakfast.map((meal: any, index: number) => (
                                             <Card key={index} className="workout-card">
                                                 <CardHeader className="p-4">
                                                     <CardTitle className="text-base">{meal.title}</CardTitle>
@@ -288,7 +324,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                                 <CardContent className="p-4 pt-0">
                                                     <p className="text-sm font-medium mb-1">Ingredients:</p>
                                                     <ul className="text-sm text-muted-foreground space-y-1">
-                                                        {meal.ingredients.map((ingredient, i) => (
+                                                        {meal.ingredients.map((ingredient: string, i: number) => (
                                                             <li key={i}>• {ingredient}</li>
                                                         ))}
                                                     </ul>
@@ -301,7 +337,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                 <div>
                                     <h3 className="text-lg font-semibold mb-3">Lunch Options</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {mealPlan.meals.lunch.map((meal, index) => (
+                                        {currentMealPlan.meals.lunch.map((meal: any, index: number) => (
                                             <Card key={index} className="workout-card">
                                                 <CardHeader className="p-4">
                                                     <CardTitle className="text-base">{meal.title}</CardTitle>
@@ -310,7 +346,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                                 <CardContent className="p-4 pt-0">
                                                     <p className="text-sm font-medium mb-1">Ingredients:</p>
                                                     <ul className="text-sm text-muted-foreground space-y-1">
-                                                        {meal.ingredients.map((ingredient, i) => (
+                                                        {meal.ingredients.map((ingredient: string, i: number) => (
                                                             <li key={i}>• {ingredient}</li>
                                                         ))}
                                                     </ul>
@@ -323,7 +359,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                 <div>
                                     <h3 className="text-lg font-semibold mb-3">Dinner Options</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {mealPlan.meals.dinner.map((meal, index) => (
+                                        {currentMealPlan.meals.dinner.map((meal: any, index: number) => (
                                             <Card key={index} className="workout-card">
                                                 <CardHeader className="p-4">
                                                     <CardTitle className="text-base">{meal.title}</CardTitle>
@@ -332,7 +368,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                                 <CardContent className="p-4 pt-0">
                                                     <p className="text-sm font-medium mb-1">Ingredients:</p>
                                                     <ul className="text-sm text-muted-foreground space-y-1">
-                                                        {meal.ingredients.map((ingredient, i) => (
+                                                        {meal.ingredients.map((ingredient: string, i: number) => (
                                                             <li key={i}>• {ingredient}</li>
                                                         ))}
                                                     </ul>
@@ -345,7 +381,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                 <div>
                                     <h3 className="text-lg font-semibold mb-3">Snack Options</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {mealPlan.meals.snacks.map((meal, index) => (
+                                        {currentMealPlan.meals.snacks.map((meal: any, index: number) => (
                                             <Card key={index} className="workout-card">
                                                 <CardHeader className="p-4">
                                                     <CardTitle className="text-base">{meal.title}</CardTitle>
@@ -354,7 +390,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                                                 <CardContent className="p-4 pt-0">
                                                     <p className="text-sm font-medium mb-1">Ingredients:</p>
                                                     <ul className="text-sm text-muted-foreground space-y-1">
-                                                        {meal.ingredients.map((ingredient, i) => (
+                                                        {meal.ingredients.map((ingredient: string, i: number) => (
                                                             <li key={i}>• {ingredient}</li>
                                                         ))}
                                                     </ul>
