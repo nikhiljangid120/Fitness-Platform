@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://neondb_owner:npg_WnTA0OcZ2FuP@ep-green-dust-adyyefy5-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
 }
 
 model User {
@@ -27,6 +27,16 @@ model User {
   progress       Progress[]
   completedWorkouts CompletedWorkout[]
   chatSessions   ChatSession[]
+  workoutPlans   WorkoutPlan[]
+}
+
+model WorkoutPlan {
+  id        String   @id @default(cuid())
+  userId    String
+  planData  Json     // Stores the 7-day schedule as a JSON object
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model CompletedWorkout {

@@ -44,15 +44,10 @@ import { useTheme } from "next-themes"
 
 // ... imports
 
+import { getOrCreateChatSession, saveChatMessage } from "@/app/actions/chat"
+
 export default function AITrainerPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      content: "Hi there! I'm your AI fitness trainer. How can I help you today?",
-      id: generateId(),
-      timestamp: new Date(),
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
@@ -62,6 +57,7 @@ export default function AITrainerPage() {
   const [isRecording, setIsRecording] = useState(false)
   const [autoScroll, setAutoScroll] = useState(true)
   const [chatHeight, setChatHeight] = useState("500px")
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -69,6 +65,45 @@ export default function AITrainerPage() {
   const { toast } = useToast()
   const [savedResponses, setSavedResponses] = useState<Message[]>([])
   const [userScrolled, setUserScrolled] = useState(false)
+
+  // Load chat history on mount
+  useEffect(() => {
+    const loadHistory = async () => {
+      try {
+        const session = await getOrCreateChatSession()
+        if (session && session.messages.length > 0) {
+          const formattedMessages: Message[] = session.messages.map((m: any) => ({
+            id: m.id,
+            role: m.role === "model" ? "assistant" : "user", // DB uses 'model', UI uses 'assistant'
+            content: m.content,
+            timestamp: new Date(m.createdAt)
+          }))
+          setMessages(formattedMessages)
+        } else {
+          setMessages([{
+            role: "assistant",
+            content: "Hi there! I'm your AI fitness trainer. How can I help you today?",
+            id: generateId(),
+            timestamp: new Date(),
+          }])
+        }
+        setIsInitialized(true)
+      } catch (error) {
+        console.error("Failed to load chat history:", error)
+        setMessages([{
+          role: "assistant",
+          content: "Hi there! I'm your AI fitness trainer. How can I help you today?",
+          id: generateId(),
+          timestamp: new Date(),
+        }])
+      }
+    }
+
+    // Only load if not already initialized to prevent double fetch in strict mode
+    if (!isInitialized) {
+      loadHistory()
+    }
+  }, [isInitialized])
 
   // Initialize voices
   useEffect(() => {
@@ -353,6 +388,9 @@ export default function AITrainerPage() {
         timestamp: new Date()
       }
       setMessages((prev) => [...prev, userMessage])
+      
+      // Save User Message to DB
+      saveChatMessage(input, "user") // Fire and forget for responsiveness
 
       const currentInput = input
       setInput("")
@@ -375,6 +413,9 @@ export default function AITrainerPage() {
         setMessages((prev) => [...prev, tempMessage])
 
         const response = await generateAIResponse(currentInput)
+        
+        // Save AI response to DB
+        await saveChatMessage(response, "assistant")
 
         simulateTypingEffect(response, (partialText) => {
           setMessages((prev) => {

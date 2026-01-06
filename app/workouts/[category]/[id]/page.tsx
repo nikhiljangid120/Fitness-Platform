@@ -32,6 +32,7 @@ import { initVoices, preloadSpeechSynthesis } from "@/lib/speech-synthesis"
 import WorkoutCompletion from "@/components/workout-completion"
 import { workoutCategories } from "@/data/workouts"
 import Confetti from "react-confetti"
+import { saveWorkout } from "@/app/actions/workout"
 
 // Custom useWindowSize hook
 const useWindowSize = () => {
@@ -78,11 +79,38 @@ const WorkoutDetailPage = memo(() => {
   // Audio state removed
   const [time, setTime] = useState(30) // Default to 30s or exercise specific
   const [countDown, setCountDown] = useState(false) // Start directly or use true for prep
+  const savedRef = useRef(false) // Prevent duplicate saves
 
   useEffect(() => {
     initVoices()
     preloadSpeechSynthesis()
   }, [])
+
+  // Auto-save workout when complete
+  useEffect(() => {
+    if (isWorkoutComplete && workout && !savedRef.current) {
+      savedRef.current = true
+
+      const durationInSeconds = parseInt(workout.duration || "0") * 60
+
+      saveWorkout({
+        workoutId: workout.id,
+        title: workout.title,
+        duration: durationInSeconds || 1800, // Fallback to 30m
+        calories: Math.round(caloriesBurned),
+      }).then((result) => {
+        if (result.success) {
+          toast({
+            title: "Workout Saved!",
+            description: "Your progress has been recorded to your profile.",
+          })
+        } else {
+          // Silently fail or log, user still gets "Workout Complete" toast
+          console.error("Failed to save workout")
+        }
+      })
+    }
+  }, [isWorkoutComplete, workout, caloriesBurned, toast])
 
   // Removed broken audio initialization
 

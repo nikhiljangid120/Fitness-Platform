@@ -38,8 +38,8 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
         streak: stats.streak,
         workoutsCompleted: stats.workoutsCompleted,
         currentWeight: user?.weight || stats.currentWeight,
-        targetWeight: stats.targetWeight, // In a real app, this should be in the DB
-        startWeight: stats.startWeight, // In a real app, this should be in the DB
+        targetWeight: stats.targetWeight,
+        startWeight: stats.startWeight,
     }
 
     // Sample workout plan - tied to category 0 for demo if no dynamic plan yet
