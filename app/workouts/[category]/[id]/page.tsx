@@ -324,10 +324,9 @@ const WorkoutDetailPage = memo(() => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="container relative"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen bg-background pb-20"
       role="main"
       aria-label="FlexForge Workout Detail Page"
     >
@@ -341,111 +340,280 @@ const WorkoutDetailPage = memo(() => {
         />
       )}
 
-      <div className="flex items-center gap-2 mb-6">
-        <Button variant="ghost" size="sm" asChild aria-label="Back to Workouts">
-          <Link href="/workouts">
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Back to Workouts
-          </Link>
-        </Button>
-        <span className="flexforge-branding text-lg">FlexForge</span>
-      </div>
+      {/* Immersive Hero Section */}
+      <div className="relative h-[50vh] min-h-[400px] w-full overflow-hidden">
+        <Image
+          src={workout.image || "/placeholder.svg?height=800&width=1200"}
+          alt={workout.title}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-black/30" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
-        <div className="lg:col-span-2">
-          <motion.div
-            className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{workout.title}</h1>
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Dumbbell className="h-3 w-3" />
-                  {workout.level}
-                </Badge>
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  {workout.duration}
-                </Badge>
-                {workout.equipment.map((item, index) => (
-                  <Badge key={index} variant="secondary">
-                    {item}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+        <div className="container h-full flex flex-col justify-between py-6 relative z-10">
+          <div className="flex justify-between items-start">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              asChild 
+              className="text-white hover:bg-white/20 hover:text-white backdrop-blur-sm"
+              aria-label="Back to Workouts"
+            >
+              <Link href="/workouts">
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Back
+              </Link>
+            </Button>
+            
             <div className="flex gap-2">
-              <Button
+               <Button
                 onClick={toggleAudio}
-                variant="outline"
+                variant="ghost"
                 size="icon"
+                className="text-white hover:bg-white/20 hover:text-white backdrop-blur-sm rounded-full"
                 aria-label={isAudioPlaying ? "Pause Audio" : "Play Audio"}
               >
-                <Volume2 className="h-4 w-4" />
+                {isAudioPlaying ? <Volume2 className="h-5 w-5" /> : <div className="relative"><Volume2 className="h-5 w-5 opacity-50" /><div className="absolute inset-0 h-[2px] w-full bg-white top-1/2 -rotate-45" /></div>}
               </Button>
-              {!isWorkoutComplete ? (
-                <Button
-                  onClick={handlePlayPause}
-                  className="btn-modern"
-                  aria-label={isPlaying ? "Pause Workout" : "Start Workout"}
-                >
-                  {isPlaying ? (
-                    <>
-                      <Pause className="mr-2 h-4 w-4" /> Pause
-                    </>
-                  ) : (
-                    <>
-                      <Play className="mr-2 h-4 w-4" /> Start
-                    </>
-                  )}
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleReset}
-                  className="btn-modern"
-                  aria-label="Restart Workout"
-                >
-                  <RotateCcw className="mr-2 h-4 w-4" /> Restart
-                </Button>
-              )}
             </div>
-          </motion.div>
+          </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.2 }}
+            className="mb-4"
           >
-            <Card className="modern-card mb-8">
-              <CardHeader className="pb-2">
-                <CardTitle>About This Workout</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>{workout.description}</p>
-                <Button variant="link" asChild className="mt-2 p-0">
-                  <Link href="/ai-trainer" className="flex items-center gap-1">
-                    <Users className="h-4 w-4" /> Ask FlexForge AI Trainer
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <Badge className="bg-primary/90 hover:bg-primary backdrop-blur-md border-none text-white px-3 py-1 text-sm">
+                <Dumbbell className="h-3 w-3 mr-1" />
+                {workout.level}
+              </Badge>
+              <Badge variant="outline" className="border-white/40 text-white backdrop-blur-sm px-3 py-1">
+                <Clock className="h-3 w-3 mr-1" />
+                {workout.duration}
+              </Badge>
+              {workout.equipment.map((item, index) => (
+                <Badge key={index} variant="secondary" className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-none">
+                  {item}
+                </Badge>
+              ))}
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-2 shadow-sm drop-shadow-md">
+              {workout.title}
+            </h1>
+            <p className="text-lg text-white/90 max-w-2xl font-medium drop-shadow-sm line-clamp-2">
+              {workout.description}
+            </p>
           </motion.div>
+        </div>
+      </div>
 
-          <motion.div
-            className="mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Card className="bg-gradient-to-r from-orange-600 to-red-600 text-white modern-card">
-              <CardContent className="p-6 text-center">
-                <p className="text-lg font-semibold italic">"{randomQuote}"</p>
-              </CardContent>
-            </Card>
-          </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* LEFT COLUMN: Visuals & Timer (8 cols) */}
+          <div className="lg:col-span-8">
+             <AnimatePresence mode="wait">
+              {isWorkoutComplete ? (
+                 <motion.div
+                    key="completion"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                 >
+                    <WorkoutCompletion 
+                      isOpen={true}
+                      onClose={() => setShowCompletionModal(false)}
+                      stats={{
+                        duration: workout.duration,
+                        caloriesBurned: caloriesBurned,
+                        exercisesCompleted: totalExercises,
+                      }}
+                    />
+                 </motion.div>
+              ) : (
+                <motion.div
+                  key="exercise-visual"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4 }}
+                  className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl group"
+                >
+                   {/* Main Image/Video */}
+                   <Image
+                      src={currentExercise.image}
+                      alt={currentExercise.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      priority
+                   />
+                   <div className="absolute inset-0 bg-black/20" /> {/* Slight dim */}
+
+                   {/* Overlay Timer - Large Center */}
+                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="relative">
+                         {/* Optional: Add a subtle glow behind the timer */}
+                         <div className="absolute inset-0 bg-black/40 blur-xl rounded-full transform scale-150" />
+                         <svg className="progress-ring relative z-10 w-48 h-48 drop-shadow-2xl" viewBox="0 0 120 120">
+                            <circle
+                              className="progress-ring__circle stroke-white/20"
+                              strokeWidth="4"
+                              fill="transparent"
+                              r={radius}
+                              cx="60"
+                              cy="60"
+                            />
+                             <circle
+                              className="progress-ring__circle stroke-primary transition-all duration-300 ease-linear"
+                              strokeWidth="6"
+                              strokeLinecap="round"
+                              fill="transparent"
+                              r={radius}
+                              cx="60"
+                              cy="60"
+                              style={{ strokeDasharray: circumference, strokeDashoffset: offset }}
+                            />
+                             <foreignObject x="0" y="0" width="120" height="120">
+                                <div className="h-full w-full flex flex-col items-center justify-center text-white">
+                                   <span className="text-4xl font-bold tracking-tighter tabular-nums drop-shadow-md">
+                                     {countDown && time <= 10 ? (
+                                        <span className="text-red-400 animate-pulse">{formatTime(time)}</span>
+                                     ) : (
+                                        formatTime(time)
+                                     )}
+                                   </span>
+                                   <span className="text-xs uppercase tracking-widest opacity-80 mt-1 font-semibold">{countDown ? "Rest" : "Work"}</span>
+                                </div>
+                             </foreignObject>
+                         </svg>
+                      </div>
+                   </div>
+
+                   {/* Glass Control Bar */}
+                   <div className="absolute bottom-6 left-6 right-6 h-20 rounded-2xl glass-effect flex items-center justify-between px-6 z-20 shadow-lg backdrop-blur-xl border border-white/20">
+                      <div className="flex items-center gap-4">
+                         <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={handlePrevious} 
+                            disabled={currentExerciseIndex === 0}
+                            className="text-primary hover:bg-primary/10 hover:text-primary rounded-full"
+                         >
+                            <ChevronLeft className="h-6 w-6" />
+                         </Button>
+                         
+                         <div className="h-10 w-[1px] bg-border/50 mx-2" />
+                         
+                         <div className="flex flex-col">
+                            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Current</span>
+                            <span className="text-sm font-bold text-foreground line-clamp-1">{currentExercise.title}</span>
+                         </div>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                         <Button 
+                           size="lg"
+                           onClick={handlePlayPause}
+                           className="rounded-full h-12 w-12 p-0 bg-primary hover:bg-primary-dark shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                         >
+                            {isPlaying ? <Pause className="h-5 w-5 fill-white" /> : <Play className="h-5 w-5 fill-white ml-1" />}
+                         </Button>
+
+                         <div className="h-10 w-[1px] bg-border/50 mx-2" />
+
+                         <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={handleNext} 
+                            className="text-primary hover:bg-primary/10 hover:text-primary rounded-full"
+                         >
+                            <ChevronRight className="h-6 w-6" />
+                         </Button>
+                      </div>
+                   </div>
+                </motion.div>
+              )}
+             </AnimatePresence>
+          </div>
+
+          {/* RIGHT COLUMN: Info & Stats (4 cols) */}
+          <div className="lg:col-span-4 space-y-6">
+             {/* Stats Grid */}
+             <div className="grid grid-cols-2 gap-4">
+                 <Card className="modern-card bg-card/50 backdrop-blur-sm border-none shadow-sm">
+                    <CardContent className="p-4 flex flex-col items-center justify-center text-center">
+                       <div className="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-2">
+                          <Heart className="h-4 w-4 text-red-500" />
+                       </div>
+                       <span className="text-2xl font-bold text-foreground">{heartRate.current}</span>
+                       <span className="text-xs text-muted-foreground uppercase">BPM</span>
+                    </CardContent>
+                 </Card>
+                 <Card className="modern-card bg-card/50 backdrop-blur-sm border-none shadow-sm">
+                    <CardContent className="p-4 flex flex-col items-center justify-center text-center">
+                       <div className="h-8 w-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center mb-2">
+                          <Flame className="h-4 w-4 text-orange-500" />
+                       </div>
+                       <span className="text-2xl font-bold text-foreground">{Math.round(caloriesBurned)}</span>
+                       <span className="text-xs text-muted-foreground uppercase">KCAL</span>
+                    </CardContent>
+                 </Card>
+             </div>
+
+             {/* Instructions Card */}
+             <Card className="modern-card border-none shadow-md overflow-hidden flex flex-col">
+                <div className="bg-primary/5 p-4 border-b border-primary/10 flex justify-between items-center">
+                   <h3 className="font-semibold flex items-center gap-2">
+                     <Info className="h-4 w-4 text-primary" />
+                     Instructions
+                   </h3>
+                   <Badge variant="secondary" className="text-xs font-normal bg-background/80">
+                      Step {currentExerciseIndex + 1} / {totalExercises}
+                   </Badge>
+                </div>
+                <CardContent className="p-5 flex-grow">
+                   <p className="text-muted-foreground leading-relaxed mb-4">
+                      {currentExercise.instructions}
+                   </p>
+                   <div className="flex items-center gap-2 mt-auto">
+                     <EnhancedTextToSpeech text={currentExercise.instructions} />
+                     <span className="text-xs text-muted-foreground">Hear instructions</span>
+                   </div>
+                </CardContent>
+             </Card>
+
+             {/* Next Up Preview */}
+             {currentExerciseIndex < totalExercises - 1 && (
+               <motion.div
+                 initial={{ opacity: 0, x: 20 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 key={exercises[currentExerciseIndex + 1].id}
+                 className="group cursor-pointer"
+                 onClick={handleNext}
+               >
+                 <div className="flex items-center gap-4 p-3 rounded-xl bg-card hover:bg-accent/50 transition-colors border border-border/50">
+                    <div className="relative h-16 w-16 rounded-lg overflow-hidden flex-shrink-0">
+                       <Image 
+                         src={exercises[currentExerciseIndex + 1].image} 
+                         alt="Next" 
+                         fill 
+                         className="object-cover"
+                       />
+                    </div>
+                    <div>
+                       <span className="text-xs text-muted-foreground uppercase font-semibold">Up Next</span>
+                       <h4 className="font-bold text-foreground line-clamp-1">{exercises[currentExerciseIndex + 1].title}</h4>
+                       <span className="text-xs text-muted-foreground">{exercises[currentExerciseIndex + 1].reps}</span>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground ml-auto group-hover:translate-x-1 transition-transform" />
+                 </div>
+               </motion.div>
+             )}
+          </div>
+        </div>
 
           <AnimatePresence>
             {isWorkoutComplete ? (
@@ -793,18 +961,18 @@ const WorkoutDetailPage = memo(() => {
             </div>
           </div>
         </motion.div>
-      </div>
+      </div >
 
-      <WorkoutCompletion
-        isOpen={showCompletionModal}
-        onClose={() => setShowCompletionModal(false)}
-        stats={{
-          duration: workout.duration,
-          caloriesBurned: caloriesBurned,
-          exercisesCompleted: totalExercises,
-        }}
-      />
-    </motion.div>
+  <WorkoutCompletion
+    isOpen={showCompletionModal}
+    onClose={() => setShowCompletionModal(false)}
+    stats={{
+      duration: workout.duration,
+      caloriesBurned: caloriesBurned,
+      exercisesCompleted: totalExercises,
+    }}
+  />
+    </motion.div >
   )
 })
 
