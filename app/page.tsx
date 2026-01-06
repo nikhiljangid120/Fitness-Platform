@@ -79,7 +79,7 @@ export default function Home() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      clearInterval(counterTimer);
+      if (typeof counterTimer === 'function') counterTimer();
       observer.disconnect();
     };
   }, []);
@@ -137,7 +137,7 @@ export default function Home() {
                   size="lg"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-1 rounded-full font-medium"
                 >
-                  <Link href="/workouts">
+                  <Link href="/onboarding">
                     Get Started <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
@@ -757,7 +757,7 @@ export default function Home() {
           </div>
 
           {/* App promo section */}
-          <div className="mt-16 bg-gradient-to-br from-orange-100 to-red-100 rounded-3xl overflow-hidden">
+          <div className="mt-16 bg-gradient-to-br from-orange-100 to-red-100 dark:from-slate-900 dark:to-slate-800 rounded-3xl overflow-hidden border border-transparent dark:border-border">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="p-8 md:p-12 flex flex-col justify-center">
                 <Badge className="mb-4 inline-flex w-auto px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 self-start">MOBILE APP</Badge>
@@ -794,136 +794,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section with enhanced cards */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/30 section-fade-in">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <Badge className="mb-4 px-4 py-1.5 bg-primary/10 text-primary hover:bg-primary/20 transition-colors font-medium text-sm rounded-full">TESTIMONIALS</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Success Stories</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              See how FlexForge has transformed the lives of our community members
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Govind Goyal",
-                achievement: "Lost 30 lbs in 3 months",
-                image: "/govind.jpg",
-                quote:
-                  "FlexForge completely changed my approach to fitness. The personalized plans and AI trainer kept me motivated and on track.",
-              },
-              {
-                name: "Sachin Gurjar",
-                achievement: "Gained 15 lbs of muscle",
-                image: "/sachin.jpg",
-                quote:
-                  "As someone who struggled with building muscle, the structured programs and nutrition advice were exactly what I needed to see real results.",
-              },
-              {
-                name: "Soyal Islam",
-                achievement: "Improved marathon time by 20 minutes",
-                image: "/soyal.jpg",
-                quote:
-                  "The cardio programs and endurance training tips helped me shave 20 minutes off my marathon time. I couldn't be happier with my progress!",
-              },
-            ].map((testimonial, index) => (
-              <Card
-                key={index}
-                className="bg-white p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.03] border-0 rounded-2xl"
-              >
-                <CardContent className="p-0">
-                  <div className="relative flex justify-center mb-6">
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-primary/50 shadow-lg group">
-                      <img
-                        src={testimonial.image || "/placeholder.svg"}
-                        alt={testimonial.name}
-                        className={`w-full h-full object-cover object-center transition-transform duration-500 ${testimonial.name === "Govind Goyal"
-                          ? "scale-125 group-hover:scale-150"
-                          : ""
-                          }`}
-                      />
-                      {/* Halo Ping Animation */}
-                      <span className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping opacity-50"></span>
-                    </div>
-                  </div>
-                  <div className="flex justify-center mb-3">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className="h-5 w-5 text-yellow-400 fill-yellow-400"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground text-center italic mb-6">
-                    "{testimonial.quote}"
-                  </p>
-                  <div className="pt-4 border-t border-gray-100 text-center">
-                    <h3 className="font-semibold text-lg">{testimonial.name}</h3>
-                    <p className="text-sm text-primary">{testimonial.achievement}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-
-          <div className="mt-16 px-4 sm:px-6 lg:px-8">
-            <h3 className="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-900">Transformation Gallery</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {[
-                {
-                  id: 1,
-                  title: 'Weight Loss Journey',
-                  description: '35 lbs lost in 12 weeks',
-                  imageUrl: 'https://lh7-rt.googleusercontent.com/docsz/AD_4nXe_1scK4EwJIhGaesysxlsw6RFuZnrrplkeMBVCMYoPgpV4RscE3bMEWwaAeWORUZUPH9zrChHpdXs6YboeBJwi-PNgII7JD4ZfSvlIUCpbDY1UFdJAH3qlgqaZ_0on1R5zjDec?key=kCFbQhoYHhWKkvPFnrR6kCMe',
-                  alt: 'Weight Loss Transformation',
-                },
-                {
-                  id: 2,
-                  title: 'Six Pack Abs',
-                  description: 'Defined abs in 16 weeks',
-                  imageUrl: 'https://cf-img-a-in.tosshub.com/sites/visualstory/stories/2022_03/story_6233/assets/2.jpeg?time=1648453730',
-                  alt: 'Six Pack Abs Transformation',
-                },
-                {
-                  id: 3,
-                  title: 'Muscle Development',
-                  description: '20 lbs muscle gain in 20 weeks',
-                  imageUrl: 'https://i.pinimg.com/564x/c2/18/99/c21899a736a0dc2f3d74aed3c8c87364.jpg',
-                  alt: 'Muscle Development Transformation',
-                },
-                {
-                  id: 4,
-                  title: 'Overall Fitness',
-                  description: 'Improved stamina and strength in 14 weeks',
-                  imageUrl: 'https://w7.pngwing.com/pngs/347/868/png-transparent-john-cena-wwe-superstars-professional-wrestling-professional-wrestler-muscle-fitness-john-cena-physical-fitness-face-arm.png',
-                  alt: 'Overall Fitness Transformation',
-                },
-              ].map((item) => (
-                <div
-                  key={item.id}
-                  className="relative overflow-hidden rounded-xl group shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
-                  <img
-                    src={item.imageUrl}
-                    alt={item.alt}
-                    className="w-full h-auto object-cover aspect-[3/4] transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="p-4 text-white">
-                      <div className="font-bold text-sm md:text-base">{item.title}</div>
-                      <div className="text-xs md:text-sm text-white/80 mt-1">{item.description}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
       {/* Fitness Tip Section with enhanced design */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white section-fade-in">
         <div className="max-w-3xl mx-auto">
