@@ -56,6 +56,12 @@ const useWindowSize = () => {
 // FlexForge-themed CSS
 
 
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return `${mins}:${secs.toString().padStart(2, "0")}`
+}
+
 const WorkoutDetailPage = memo(() => {
   const params = useParams()
   const { toast } = useToast()
