@@ -37,7 +37,7 @@ const exercises: Exercise[] = [
     instructions: "Keep your back straight, lower until elbows are 90°, push back up.",
     level: "Beginner",
     muscleGroup: "Chest, Triceps",
-    image: "/exercises/pushups.gif",
+    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop",
   },
   {
     id: "squats",
@@ -58,7 +58,7 @@ const exercises: Exercise[] = [
     instructions: "Step forward with one leg, lowering your hips until both knees are bent at about a 90-degree angle.",
     level: "Beginner",
     muscleGroup: "Quadriceps, Hamstrings, Glutes",
-    image: "/exercises/lunges.gif",
+    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop",
   },
   {
     id: "plank",
@@ -99,7 +99,7 @@ const exercises: Exercise[] = [
     instructions: "Bend at the waist with one hand on a bench, pull dumbbell up to your side with the other hand.",
     level: "Intermediate",
     muscleGroup: "Back, Biceps",
-    image: "/exercises/dumbbell-rows.gif",
+    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop",
   },
   {
     id: "bench-press",
@@ -109,7 +109,7 @@ const exercises: Exercise[] = [
     instructions: "Lie on a bench, lower the barbell to your chest, then push it back up.",
     level: "Intermediate",
     muscleGroup: "Chest, Triceps, Shoulders",
-    image: "/exercises/bench-press.gif",
+    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop",
   },
   {
     id: "deadlifts",
@@ -119,7 +119,7 @@ const exercises: Exercise[] = [
     instructions: "Stand with feet hip-width apart, bend at hips and knees to grip the bar, then stand up straight.",
     level: "Advanced",
     muscleGroup: "Lower Back, Hamstrings, Glutes",
-    image: "/exercises/deadlifts.gif",
+    image: "https://images.unsplash.com/photo-1517344884509-a0c97ec11bcc?q=80&w=2070&auto=format&fit=crop",
   },
   {
     id: "pull-ups",
@@ -129,11 +129,11 @@ const exercises: Exercise[] = [
     instructions: "Hang from a bar with palms facing away, pull yourself up until your chin is over the bar.",
     level: "Advanced",
     muscleGroup: "Back, Biceps",
-    image: "/exercises/pull-ups.gif",
+    image: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=2074&auto=format&fit=crop",
   },
 ]
 
-// Sample workouts organized by categories
+
 export const workoutCategories: WorkoutCategory[] = [
   {
     id: "weight-loss",
@@ -269,7 +269,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Begin in mountain pose, then flow through upward salute, forward fold, plank, chaturanga, upward dog, downward dog, and back to mountain pose.",
             level: "Beginner",
             muscleGroup: "Full Body",
-            image: "/exercises/sun-salutation.gif",
+            image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
           },
           {
             id: "warrior-1",
@@ -280,7 +280,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "From downward dog, step one foot forward between your hands, align your heel, and raise your arms overhead while lifting your torso.",
             level: "Beginner",
             muscleGroup: "Legs, Core, Shoulders",
-            image: "/exercises/warrior-1.gif",
+            image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
           },
           {
             id: "warrior-2",
@@ -290,7 +290,7 @@ export const workoutCategories: WorkoutCategory[] = [
             instructions: "From Warrior I, open your hips and arms to the side, gazing over your front hand.",
             level: "Beginner",
             muscleGroup: "Legs, Core, Shoulders",
-            image: "/exercises/warrior-2.gif",
+            image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
           },
           {
             id: "tree-pose",
@@ -301,7 +301,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Stand on one leg, place the sole of your other foot on your inner thigh, and bring your hands to prayer position.",
             level: "Beginner",
             muscleGroup: "Legs, Core, Balance",
-            image: "/exercises/tree-pose.gif",
+            image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
           },
         ],
       },
@@ -323,7 +323,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Stand with feet hip-width apart, hinge at the hips, and fold forward, reaching toward the floor. Bend knees if needed.",
             level: "Beginner",
             muscleGroup: "Hamstrings, Lower Back",
-            image: "/exercises/forward-fold.gif",
+            image: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=2026&auto=format&fit=crop",
           },
           {
             id: "pigeon-pose",
@@ -334,7 +334,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "From downward dog, bring one knee forward behind your wrist, extend the other leg back, and fold forward over your bent leg.",
             level: "Intermediate",
             muscleGroup: "Hips, Glutes",
-            image: "/exercises/pigeon-pose.gif",
+            image: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=2026&auto=format&fit=crop",
           },
           {
             id: "butterfly-stretch",
@@ -345,7 +345,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Sit with the soles of your feet together, knees out to the sides. Hold your feet and gently press your knees toward the floor.",
             level: "Beginner",
             muscleGroup: "Inner Thighs, Hips",
-            image: "/exercises/butterfly-stretch.gif",
+            image: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=2026&auto=format&fit=crop",
           },
           {
             id: "cobra-pose",
@@ -356,7 +356,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Lie face down, place hands under shoulders, and gently lift chest while keeping hips on the floor.",
             level: "Beginner",
             muscleGroup: "Spine, Chest",
-            image: "/exercises/cobra-pose.gif",
+            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
           },
           {
             id: "seated-forward-fold",
@@ -366,7 +366,7 @@ export const workoutCategories: WorkoutCategory[] = [
             instructions: "Sit with legs extended, hinge at the hips, and reach toward your toes.",
             level: "Beginner",
             muscleGroup: "Hamstrings, Lower Back",
-            image: "/exercises/seated-forward-fold.gif",
+            image: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=2026&auto=format&fit=crop",
           },
         ],
       },
@@ -387,7 +387,7 @@ export const workoutCategories: WorkoutCategory[] = [
             instructions: "A more intense version of Sun Salutation that includes Chair pose and Warrior I.",
             level: "Intermediate",
             muscleGroup: "Full Body",
-            image: "/exercises/sun-salutation-b.gif",
+            image: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=2070&auto=format&fit=crop",
           },
           {
             id: "chaturanga",
@@ -397,7 +397,7 @@ export const workoutCategories: WorkoutCategory[] = [
             instructions: "From plank position, lower halfway down like a push-up, keeping elbows close to your body.",
             level: "Intermediate",
             muscleGroup: "Chest, Arms, Core",
-            image: "/exercises/chaturanga.gif",
+            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
           },
           {
             id: "side-plank",
@@ -408,7 +408,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "From plank position, shift weight to one arm, stack feet, and lift other arm toward ceiling.",
             level: "Intermediate",
             muscleGroup: "Core, Shoulders",
-            image: "/exercises/side-plank.gif",
+            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
           },
           {
             id: "boat-pose",
@@ -419,7 +419,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Sit with knees bent, lift feet off floor, balance on sit bones, and extend legs if possible.",
             level: "Intermediate",
             muscleGroup: "Core, Hip Flexors",
-            image: "/exercises/boat-pose.gif",
+            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
           },
           {
             id: "crow-pose",
@@ -430,7 +430,7 @@ export const workoutCategories: WorkoutCategory[] = [
               "Squat down, place hands on floor, knees on upper arms, and shift weight forward until feet lift off floor.",
             level: "Advanced",
             muscleGroup: "Arms, Core, Balance",
-            image: "/exercises/crow-pose.gif",
+            image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2020&auto=format&fit=crop",
           },
         ],
       },

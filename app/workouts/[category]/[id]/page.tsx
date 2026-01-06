@@ -232,11 +232,26 @@ const WorkoutDetailPage = memo(() => {
   }, [])
 
   useEffect(() => {
-    audioRef.current = new Audio("/audio/workout-motivation.mp3")
-    audioRef.current.loop = true
+    try {
+      const audio = new Audio("/audio/workout-motivation.mp3")
+      audio.loop = true
+
+      // Add error listener
+      audio.onerror = (e) => {
+        console.warn("Audio file not found or failed to load:", e)
+        setIsAudioPlaying(false)
+      }
+
+      audioRef.current = audio
+    } catch (error) {
+      console.warn("Failed to initialize audio:", error)
+    }
+
     return () => {
-      audioRef.current?.pause()
-      audioRef.current = null
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
     }
   }, [])
 
@@ -412,9 +427,11 @@ const WorkoutDetailPage = memo(() => {
   }
 
   const toggleAudio = () => {
+    if (!audioRef.current) return
+
     setIsAudioPlaying((prev) => {
       if (!prev) {
-        audioRef.current?.play()
+        audioRef.current?.play().catch(e => console.warn("Play failed:", e))
       } else {
         audioRef.current?.pause()
       }
@@ -451,14 +468,20 @@ const WorkoutDetailPage = memo(() => {
   }, [currentExercise.title])
 
   const getExerciseImageUrl = useCallback((exercise: any) => {
+    // Map of keywords to image URLs (prioritizing available local GIFs, then Unsplash)
     const exerciseImages: { [key: string]: string } = {
-      push: "/exercises/pushups.gif",
+      // Local GIFs that exist
       squat: "/exercises/squats.gif",
       plank: "/exercises/plank.gif",
       burpee: "/exercises/burpees.gif",
-      lunge: "/exercises/lunges.gif",
       mountain: "/exercises/mountain-climbers.gif",
-      row: "/exercises/dumbbell-rows.gif",
+
+      // Fallbacks for missing local GIFs using high-quality Unsplash images
+      push: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop", // Pushups
+      lunge: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop", // Lunges ( reusing similar fitness image)
+      row: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop", // Rows
+
+      // Existing remote mappings
       deadlift: "https://images.unsplash.com/photo-1517344884509-a0c97ec11bcc?q=80&w=2070&auto=format&fit=crop",
       bench: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop",
       pull: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=2074&auto=format&fit=crop",
@@ -845,9 +868,8 @@ const WorkoutDetailPage = memo(() => {
                 whileTap={{ scale: 0.98 }}
               >
                 <Card
-                  className={`exercise-card modern-card ${
-                    index === currentExerciseIndex ? "active" : index < currentExerciseIndex ? "completed" : ""
-                  }`}
+                  className={`exercise-card modern-card ${index === currentExerciseIndex ? "active" : index < currentExerciseIndex ? "completed" : ""
+                    }`}
                   onClick={() => {
                     setCurrentExerciseIndex(index)
                     setSeconds(0)
@@ -860,13 +882,12 @@ const WorkoutDetailPage = memo(() => {
                   <CardHeader className="p-4">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-                          index === currentExerciseIndex
-                            ? "bg-primary text-primary-foreground"
-                            : index < currentExerciseIndex
-                              ? "bg-muted-foreground/20 text-muted-foreground"
-                              : "bg-muted text-muted-foreground"
-                        }`}
+                        className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${index === currentExerciseIndex
+                          ? "bg-primary text-primary-foreground"
+                          : index < currentExerciseIndex
+                            ? "bg-muted-foreground/20 text-muted-foreground"
+                            : "bg-muted text-muted-foreground"
+                          }`}
                       >
                         {index < currentExerciseIndex ? <CheckCircle className="h-4 w-4" /> : index + 1}
                       </div>

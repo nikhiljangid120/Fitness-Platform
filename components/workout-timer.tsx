@@ -225,7 +225,12 @@ export default function WorkoutTimer({
       <Card className="workout-timer-card">
         <CardContent className="p-4">
           <div className="flex flex-col items-center">
-            <div className="text-4xl font-bold mb-4 timer-display">{formatTime(time)}</div>
+            <div
+              className={`text-4xl font-bold mb-4 timer-display transition-colors duration-300 ${countDown && time <= 10 ? "text-red-500 animate-pulse scale-110" : ""
+                }`}
+            >
+              {formatTime(time)}
+            </div>
             <div className="flex gap-2">
               <Button onClick={toggleTimer} size="sm" className="bg-primary hover:bg-primary/90">
                 {isRunning ? <Pause className="h-4 w-4 mr-1" /> : <Play className="h-4 w-4 mr-1" />}
