@@ -356,4 +356,4 @@ const WorkoutDetailPage = memo(() => {
 })
 
 WorkoutDetailPage.displayName = "WorkoutDetailPage"
-  ```
+export default WorkoutDetailPage
