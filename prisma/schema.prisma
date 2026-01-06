@@ -17,6 +17,7 @@ model User {
   image          String?
   height         Float?    // stored in cm
   weight         Float?    // stored in kg
+  targetWeight   Float?    // stored in kg
   fitnessGoal    String?   // e.g., "WEIGHT_LOSS", "MUSCLE_GAIN"
   activityLevel  String?
   
