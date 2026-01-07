@@ -33,7 +33,13 @@ interface WorkoutPlanData {
     schedule: any[]
 }
 
-export default function DashboardClient({ user, stats }: DashboardProps) {
+interface DashboardProps {
+    user: any
+    stats: any
+    initialPlan?: WorkoutPlanData | null
+}
+
+export default function DashboardClient({ user, stats, initialPlan }: DashboardProps) {
     const [date, setDate] = useState<Date | undefined>(new Date())
     const [waterIntake, setWaterIntake] = useState(3)
     const maxWaterIntake = 8
@@ -51,7 +57,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
     }
 
     // AI Plan State
-    const [aiPlan, setAiPlan] = useState<WorkoutPlanData | null>(null)
+    const [aiPlan, setAiPlan] = useState<WorkoutPlanData | null>(initialPlan || null)
     const [isGeneratingPlan, setIsGeneratingPlan] = useState(false)
 
     // Use AI plan if available, otherwise fallback to static for demo

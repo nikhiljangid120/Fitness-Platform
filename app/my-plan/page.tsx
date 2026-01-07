@@ -49,6 +49,12 @@ export default async function MyPlanPage() {
     orderBy: { date: "asc" },
   })
 
+  // Fetch latest AI Plan
+  const latestPlan = await prisma.workoutPlan.findFirst({
+    where: { userId: user.id },
+    orderBy: { createdAt: 'desc' }
+  })
+
   const startWeight = progress.length > 0 ? progress[0].weight : (user.weight || 80)
   const currentWeight = user.weight || 80
 
@@ -61,5 +67,5 @@ export default async function MyPlanPage() {
     startWeight,
   }
 
-  return <DashboardClient user={user} stats={stats} />
+  return <DashboardClient user={user} stats={stats} initialPlan={latestPlan?.planData as any} />
 }

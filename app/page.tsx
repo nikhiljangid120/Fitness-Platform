@@ -27,9 +27,12 @@ import { Badge } from "@/components/ui/badge"
 import FitnessTip from "@/components/fitness-tip"
 import WorkoutOfTheDay from "@/components/workout-of-the-day"
 import FitnessCalculator from "@/components/fitness-calculator"
-import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Loader2 } from "lucide-react"
 
 export default function Home() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   // Add animated counter state
   const [counts, setCounts] = useState({
     workouts: 0,
@@ -134,13 +137,23 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-2">
                 <Button
-                  asChild
                   size="lg"
+                  onClick={() => {
+                    setIsLoading(true);
+                    router.push("/onboarding");
+                  }}
+                  disabled={isLoading}
                   className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transition-all duration-300 hover:scale-105 hover:rotate-1 rounded-full font-medium"
                 >
-                  <Link href="/onboarding">
-                    Get Started <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </Link>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Loading...
+                    </>
+                  ) : (
+                    <>
+                      Get Started <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    </>
+                  )}
                 </Button>
                 <Button
                   asChild
