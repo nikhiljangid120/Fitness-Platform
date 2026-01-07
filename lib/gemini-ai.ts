@@ -17,7 +17,7 @@ export async function generateAIResponse(prompt: string): Promise<string> {
       console.log("Attempting Groq...")
       const completion = await groq.chat.completions.create({
         messages: [
-          { role: "system", content: "You are an expert fitness trainer. Return valid JSON when requested." },
+          { role: "system", content: "You are an expert fitness trainer named FlexForge Coach. Keep your answers concise, motivating, and to the point. Avoid long lectures. Use simple formatting. Only return JSON if specifically asked for a workout or meal plan structure." },
           { role: "user", content: prompt }
         ],
         model: "llama-3.3-70b-versatile",
