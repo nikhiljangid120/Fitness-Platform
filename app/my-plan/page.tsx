@@ -57,11 +57,22 @@ export default async function MyPlanPage() {
 
   // Fetch latest AI Plan
   let latestPlan = null
+  let parsedPlanData = null
+
   try {
     latestPlan = await prisma.workoutPlan.findFirst({
       where: { userId: user.id },
       orderBy: { createdAt: 'desc' }
     })
+
+    if (latestPlan && latestPlan.planData) {
+      try {
+        parsedPlanData = JSON.parse(latestPlan.planData as string)
+      } catch (e) {
+        console.error("Failed to parse plan JSON", e)
+      }
+    }
+
   } catch (e) { console.warn("DB Error (Plan):", e) }
 
   const startWeight = progress.length > 0 ? progress[0].weight : (user.weight || 80)
@@ -76,5 +87,5 @@ export default async function MyPlanPage() {
     startWeight,
   }
 
-  return <DashboardClient user={user} stats={stats} initialPlan={latestPlan?.planData as any} />
+  return <DashboardClient user={user} stats={stats} initialPlan={parsedPlanData} />
 }

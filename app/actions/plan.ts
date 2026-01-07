@@ -89,7 +89,7 @@ export async function generateWeeklyPlan() {
         const plan = await prisma.workoutPlan.create({
             data: {
                 userId: user.id,
-                planData: planData
+                planData: JSON.stringify(planData)
             }
         })
 
