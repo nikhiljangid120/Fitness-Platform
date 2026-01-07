@@ -11,14 +11,17 @@ export default async function MyPlanPage() {
   }
 
   // Fetch workout history
-  const workouts = await prisma.completedWorkout.findMany({
-    where: { userId: user.id },
-    orderBy: { completedAt: "desc" },
-  })
+  let workouts: any[] = []
+  try {
+    workouts = await prisma.completedWorkout.findMany({
+      where: { userId: user.id },
+      orderBy: { completedAt: "desc" },
+    })
+  } catch (e) { console.warn("DB Error (Workouts):", e) }
 
-  // Calculate streak
-  // Naive implementation: Check consecutive days backwards from today
-  // In a real app, this might be more complex or stored as a field
+  // Calculate streak logic...
+  // ... (keep existing streak logic, it works on empty array too)
+
   let streak = 0
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -44,16 +47,22 @@ export default async function MyPlanPage() {
   }
 
   // Fetch weight progress
-  const progress = await prisma.progress.findMany({
-    where: { userId: user.id },
-    orderBy: { date: "asc" },
-  })
+  let progress: any[] = []
+  try {
+    progress = await prisma.progress.findMany({
+      where: { userId: user.id },
+      orderBy: { date: "asc" },
+    })
+  } catch (e) { console.warn("DB Error (Progress):", e) }
 
   // Fetch latest AI Plan
-  const latestPlan = await prisma.workoutPlan.findFirst({
-    where: { userId: user.id },
-    orderBy: { createdAt: 'desc' }
-  })
+  let latestPlan = null
+  try {
+    latestPlan = await prisma.workoutPlan.findFirst({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' }
+    })
+  } catch (e) { console.warn("DB Error (Plan):", e) }
 
   const startWeight = progress.length > 0 ? progress[0].weight : (user.weight || 80)
   const currentWeight = user.weight || 80
