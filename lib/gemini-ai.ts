@@ -1,17 +1,16 @@
 import Groq from "groq-sdk"
+import { GoogleGenerativeAI } from "@google/generative-ai"
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY || "dummy_key_for_build",
-  dangerouslyAllowBrowser: true // Only if needed client-side, but this is server-side
+  dangerouslyAllowBrowser: true
 })
 
-import { GoogleGenerativeAI } from "@google/generative-ai"
-
 export async function generateAIResponse(prompt: string): Promise<string> {
-  console.log("Generating AI response...")
+  console.log("Generating AI response (v2)...")
 
-  // 1. Try Groq (Fastest)
-  if (process.env.GROQ_API_KEY) {
+  // 1. Try Groq (Fastest) - Only if key is clearly present and not dummy
+  if (process.env.GROQ_API_KEY && process.env.GROQ_API_KEY.length > 20) {
     try {
       console.log("Attempting Groq...")
       const completion = await groq.chat.completions.create({
@@ -27,6 +26,8 @@ export async function generateAIResponse(prompt: string): Promise<string> {
     } catch (error) {
       console.warn("Groq failed, trying fallback...", error)
     }
+  } else {
+    console.log("GROQ_API_KEY missing or invalid, skipping to Gemini...")
   }
 
   // 2. Try Google Gemini (Backup)
@@ -49,7 +50,6 @@ export async function generateAIResponse(prompt: string): Promise<string> {
   return getFallbackResponse(prompt)
 }
 
-// Keep existing fallback logic for safety
 function getFallbackResponse(prompt: string): string {
   console.log("Using fallback response system for prompt:", prompt)
 
@@ -68,7 +68,7 @@ function getFallbackResponse(prompt: string): string {
     category = "nutrition"
   }
 
-  // Simple JSON fallback if the prompt explicitly asks for JSON (detected by structure)
+  // Simple JSON fallback if the prompt explicitly asks for JSON
   if (prompt.includes("Return ONLY valid JSON")) {
     console.log("Detected JSON request in fallback mode")
     if (category === "nutrition") {
@@ -79,7 +79,6 @@ function getFallbackResponse(prompt: string): string {
         snack: "Greek yogurt"
       })
     } else if (category === "workout") {
-      // Return a valid empty/default week plan to prevent JSON parse errors
       return JSON.stringify([
         {
           "day": "Monday",
@@ -110,13 +109,11 @@ function getFallbackResponse(prompt: string): string {
     nutrition: [
       "For weight loss, focus on creating a calorie deficit by eating:\n\n• Plenty of protein (lean meats, eggs, legumes)\n• Fiber-rich vegetables\n• Complex carbs in moderation\n\nAim for 500 calories below your maintenance level for sustainable fat loss.",
     ],
-    // ... keep it brief for now
     general: [
       "Consistency is key to fitness success. Start with small, achievable goals."
     ]
   }
 
-  // Safety check
   const responseArray = responses[category] || responses["general"]
   const randomIndex = Math.floor(Math.random() * responseArray.length)
   return responseArray[randomIndex]
