@@ -25,7 +25,7 @@ export async function getCurrentUser() {
             return user
         }
     } catch (error) {
-        console.warn("⚠️ Database unreachable. Returning transient session user.", error)
+        console.warn("⚠️ SQLite Load Error: Using transient session.", error)
 
         // Return a temporary user object so the app doesn't crash or loop
         // This allows access to pages, but data saving might still fail if DB remains down
