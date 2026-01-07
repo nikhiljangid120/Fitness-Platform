@@ -7,43 +7,12 @@ import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Send, Bot, User, Sparkles, Mic, ChevronDown, RefreshCw, Dumbbell, Apple, Volume2, StopCircle } from "lucide-react"
 
-// ... imports
-
-const [speakingId, setSpeakingId] = useState<string | null>(null)
-
-const speakMessage = (text: string, id: string) => {
-  if (speakingId === id) {
-    window.speechSynthesis.cancel()
-    setSpeakingId(null)
-    return
-  }
-
-  window.speechSynthesis.cancel()
-  const utterance = new SpeechSynthesisUtterance(text)
-  utterance.onend = () => setSpeakingId(null)
-  setSpeakingId(id)
-  window.speechSynthesis.speak(utterance)
-}
-
-// ... inside render loop for assistant message
-{
-  msg.role === "assistant" && (
-    <div className="flex flex-col items-center gap-1 mt-1">
-      <Avatar className="w-8 h-8 border">
-        <AvatarImage src="/bot-avatar.png" />
-        <AvatarFallback className="bg-primary/10 text-primary"><Bot className="w-4 h-4" /></AvatarFallback>
-      </Avatar>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="h-6 w-6 rounded-full hover:bg-muted"
-        onClick={() => speakMessage(msg.content, msg.id)}
-      >
-        {speakingId === msg.id ? <StopCircle className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
-      </Button>
-    </div>
-  )
-}
+import { generateAIResponse } from "@/lib/gemini-ai"
+import { useToast } from "@/hooks/use-toast"
+import { WorkoutAIWidget } from "@/components/ai/workout-widget"
+import { NutritionAIWidget } from "@/components/ai/nutrition-widget"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { cn } from "@/lib/utils"
 import { generateAIResponse } from "@/lib/gemini-ai"
 import { useToast } from "@/hooks/use-toast"
 import { WorkoutAIWidget } from "@/components/ai/workout-widget"
@@ -73,6 +42,23 @@ export default function AITrainerPage() {
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const { toast } = useToast()
+
+  // TTS State
+  const [speakingId, setSpeakingId] = useState<string | null>(null)
+
+  const speakMessage = (text: string, id: string) => {
+    if (speakingId === id) {
+      window.speechSynthesis.cancel()
+      setSpeakingId(null)
+      return
+    }
+
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.onend = () => setSpeakingId(null)
+    setSpeakingId(id)
+    window.speechSynthesis.speak(utterance)
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
