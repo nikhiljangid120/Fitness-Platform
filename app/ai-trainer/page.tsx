@@ -14,7 +14,6 @@ import { NutritionAIWidget } from "@/components/ai/nutrition-widget"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 
-import { cn } from "@/lib/utils"
 
 interface Message {
   role: "user" | "assistant"
