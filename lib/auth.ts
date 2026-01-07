@@ -25,10 +25,27 @@ export async function getCurrentUser() {
             return user
         }
     } catch (error) {
-        console.error("Error fetching user from DB:", error)
-        // Fallback: If DB is unreachable, we treat it as no user found (or handled by caller)
-        // This prevents the entire app from 500ing on flaky connections
-        return null
+        console.warn("⚠️ Database unreachable. Returning transient session user.", error)
+
+        // Return a temporary user object so the app doesn't crash or loop
+        // This allows access to pages, but data saving might still fail if DB remains down
+        return {
+            id: clerkUser.id,
+            email: email,
+            name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || "Guest",
+            image: clerkUser.imageUrl,
+            fitnessGoal: null,
+            age: null,
+            height: null,
+            weight: null,
+            workoutDays: [],
+            dietaryPreferences: [],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            targetWeight: null,
+            activityLevel: null,
+            gender: null
+        } as any // Cast to any to satisfy Prisma User type if needed, or Partial<User>
     }
 
     // If not, create new user
