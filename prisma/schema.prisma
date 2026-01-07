@@ -22,8 +22,8 @@ model User {
   activityLevel  String?
   age            Int?
   gender         String?
-  workoutDays    String[]  
-  dietaryPreferences String[] 
+  workoutDays    String?   // SQLite: Stored as comma-separated string
+  dietaryPreferences String? // SQLite: Stored as comma-separated string 
   
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
