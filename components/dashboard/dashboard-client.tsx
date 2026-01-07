@@ -61,8 +61,17 @@ export default function DashboardClient({ user, stats, initialPlan }: DashboardP
     const [isGeneratingPlan, setIsGeneratingPlan] = useState(false)
 
     // Use AI plan if available, otherwise fallback to static for demo
-    const planData: WorkoutPlanData = aiPlan || { schedule: [] }
-    const currentWorkoutPlan = planData.schedule.length > 0 ? planData.schedule : [
+    // Normalization for legacy data (if DB has array instead of object)
+    const normalizedPlan: WorkoutPlanData = (() => {
+        if (!aiPlan) return { schedule: [] }
+        if (Array.isArray(aiPlan)) {
+            return { schedule: aiPlan, weeklySummary: "Your customized plan." }
+        }
+        return aiPlan
+    })()
+
+    const planData: WorkoutPlanData = normalizedPlan
+    const currentWorkoutPlan = (planData.schedule && planData.schedule.length > 0) ? planData.schedule : [
         { day: "Monday", workout: workoutCategories[0].workouts[0], completed: true },
         { day: "Tuesday", workout: workoutCategories[2].workouts[1], completed: true },
         { day: "Wednesday", workout: null, completed: false, rest: true },
