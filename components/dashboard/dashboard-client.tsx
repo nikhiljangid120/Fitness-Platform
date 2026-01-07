@@ -28,6 +28,11 @@ interface DashboardProps {
     }
 }
 
+interface WorkoutPlanData {
+    weeklySummary?: string
+    schedule: any[]
+}
+
 export default function DashboardClient({ user, stats }: DashboardProps) {
     const [date, setDate] = useState<Date | undefined>(new Date())
     const [waterIntake, setWaterIntake] = useState(3)
@@ -46,12 +51,12 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
     }
 
     // AI Plan State
-    const [aiPlan, setAiPlan] = useState<any[] | null>(null)
+    const [aiPlan, setAiPlan] = useState<WorkoutPlanData | null>(null)
     const [isGeneratingPlan, setIsGeneratingPlan] = useState(false)
 
     // Use AI plan if available, otherwise fallback to static for demo
-    const planData = aiPlan || {}
-    const currentWorkoutPlan = planData.schedule || planData || [
+    const planData: WorkoutPlanData = aiPlan || { schedule: [] }
+    const currentWorkoutPlan = planData.schedule.length > 0 ? planData.schedule : [
         { day: "Monday", workout: workoutCategories[0].workouts[0], completed: true },
         { day: "Tuesday", workout: workoutCategories[2].workouts[1], completed: true },
         { day: "Wednesday", workout: null, completed: false, rest: true },
@@ -73,7 +78,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
             const result = await generateWeeklyPlan()
 
             if (result.success && result.plan?.planData) {
-                setAiPlan(result.plan.planData as any[])
+                setAiPlan(result.plan.planData as WorkoutPlanData)
                 toast({ title: "Plan Ready!", description: "Your custom workout plan has been created." })
             } else {
                 toast({ variant: "destructive", title: "Error", description: "Failed to generate plan." })
