@@ -26,22 +26,24 @@ export const FITNESS_IMAGES = {
 export function getImageForKeyword(keyword: string): string {
     const normalize = keyword.toLowerCase();
 
-    if (normalize.includes("squat") || normalize.includes("leg")) return FITNESS_IMAGES.squat;
-    if (normalize.includes("push") || normalize.includes("chest") || normalize.includes("press")) return FITNESS_IMAGES.pushup;
-    if (normalize.includes("plank") || normalize.includes("core") || normalize.includes("abs")) return FITNESS_IMAGES.plank;
+    // Muscle Groups
+    if (normalize.includes("squat") || normalize.includes("leg") || normalize.includes("quad") || normalize.includes("glute")) return FITNESS_IMAGES.squat;
+    if (normalize.includes("push") || normalize.includes("chest") || normalize.includes("press") || normalize.includes("bench")) return FITNESS_IMAGES.pushup;
+    if (normalize.includes("plank") || normalize.includes("core") || normalize.includes("abs") || normalize.includes("crunch")) return FITNESS_IMAGES.plank;
+    if (normalize.includes("back") || normalize.includes("row") || normalize.includes("pull")) return "https://images.unsplash.com/photo-1603287681836-e566914d72e2?q=80&w=2070&auto=format&fit=crop" // Specific for Back
+    if (normalize.includes("arm") || normalize.includes("bicep") || normalize.includes("tricep") || normalize.includes("curl")) return "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070&auto=format&fit=crop"; // Specific for Arms
+
+    // Cardio
     if (normalize.includes("lunge")) return FITNESS_IMAGES.lunge;
     if (normalize.includes("burpee") || normalize.includes("cardio") || normalize.includes("jump")) return FITNESS_IMAGES.burpee;
-    if (normalize.includes("run") || normalize.includes("jog")) return FITNESS_IMAGES.run;
-    if (normalize.includes("yoga") || normalize.includes("balance")) return FITNESS_IMAGES.yoga;
-    if (normalize.includes("stretch") || normalize.includes("flex")) return FITNESS_IMAGES.stretch;
-    if (normalize.includes("weight") || normalize.includes("dumbbell") || normalize.includes("strength")) return FITNESS_IMAGES.weights;
-    if (normalize.includes("hiit") || normalize.includes("intense")) return FITNESS_IMAGES.hiit;
+    if (normalize.includes("run") || normalize.includes("jog") || normalize.includes("treadmill")) return FITNESS_IMAGES.run;
 
-    // Nutrition
-    if (normalize.includes("breakfast") || normalize.includes("oat") || normalize.includes("egg")) return FITNESS_IMAGES.breakfast;
-    if (normalize.includes("lunch") || normalize.includes("salad")) return FITNESS_IMAGES.lunch;
-    if (normalize.includes("dinner") || normalize.includes("steak") || normalize.includes("fish")) return FITNESS_IMAGES.dinner;
-    if (normalize.includes("snack") || normalize.includes("yogurt")) return FITNESS_IMAGES.snack;
+    // Recovery / Low Impact
+    if (normalize.includes("yoga") || normalize.includes("balance") || normalize.includes("pilates")) return FITNESS_IMAGES.yoga;
+    if (normalize.includes("stretch") || normalize.includes("flex") || normalize.includes("recover") || normalize.includes("rest")) return FITNESS_IMAGES.stretch;
+    if (normalize.includes("weight") || normalize.includes("dumbbell") || normalize.includes("strength") || normalize.includes("lift")) return FITNESS_IMAGES.weights;
+    if (normalize.includes("hiit") || normalize.includes("intense") || normalize.includes("tabata")) return FITNESS_IMAGES.hiit;
 
-    return FITNESS_IMAGES.default;
+    // Default Fallback
+    return "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop";
 }

@@ -50,7 +50,8 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
     const [isGeneratingPlan, setIsGeneratingPlan] = useState(false)
 
     // Use AI plan if available, otherwise fallback to static for demo
-    const currentWorkoutPlan = aiPlan || [
+    const planData = aiPlan || {}
+    const currentWorkoutPlan = planData.schedule || planData || [
         { day: "Monday", workout: workoutCategories[0].workouts[0], completed: true },
         { day: "Tuesday", workout: workoutCategories[2].workouts[1], completed: true },
         { day: "Wednesday", workout: null, completed: false, rest: true },
@@ -59,6 +60,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
         { day: "Saturday", workout: workoutCategories[3].workouts[0], completed: false },
         { day: "Sunday", workout: null, completed: false, rest: true },
     ]
+    const weeklySummary = planData.weeklySummary || "Your personalized weekly plan."
 
     // Handler for generating plan
     const handleGeneratePlan = async () => {
@@ -240,6 +242,16 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                             Generate AI Plan
                         </Button>
                     </div>
+
+                    {/* Plan Summary */}
+                    {aiPlan && (
+                        <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 mb-6">
+                            <h3 className="flex items-center gap-2 font-semibold text-primary mb-2">
+                                <Sparkles className="w-4 h-4" /> Weekly Focus
+                            </h3>
+                            <p className="text-muted-foreground">{weeklySummary}</p>
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         {currentWorkoutPlan.map((day, index) => {
