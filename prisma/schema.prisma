@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -22,8 +22,8 @@ model User {
   activityLevel  String?
   age            Int?
   gender         String?
-  workoutDays    String[]  @default([])
-  dietaryPreferences String[] @default([])
+  workoutDays    String[]  
+  dietaryPreferences String[] 
   
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
@@ -38,7 +38,7 @@ model User {
 model WorkoutPlan {
   id        String   @id @default(cuid())
   userId    String
-  planData  Json     // Stores the 7-day schedule as a JSON object
+  planData  String   // SQLite doesn't support Json type native, store as String
   createdAt DateTime @default(now())
   
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -47,7 +47,7 @@ model WorkoutPlan {
 model MealPlan {
   id        String   @id @default(cuid())
   userId    String
-  planData  Json     // JSON object with breakfast, lunch, dinner, snacks
+  planData  String   // JSON stringified
   createdAt DateTime @default(now())
   
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -56,12 +56,12 @@ model MealPlan {
 model CompletedWorkout {
   id          String   @id @default(cuid())
   userId      String
-  workoutId   String   // Reference to the static ID in our dataset
+  workoutId   String   
   title       String
-  duration    Int      // in seconds
-  calories    Int      // estimated burn
-  difficulty  Int?     // 1-10 rating
-  notes       String?  // user feedback
+  duration    Int      
+  calories    Int      
+  difficulty  Int?     
+  notes       String?  
   completedAt DateTime @default(now())
 
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -71,7 +71,7 @@ model Progress {
   id        String   @id @default(cuid())
   userId    String
   date      DateTime @default(now())
-  weight    Float    // kg
+  weight    Float    
   
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -81,7 +81,7 @@ model ChatSession {
   userId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  title     String?   // Auto-generated summary
+  title     String?   
 
   messages  Message[]
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -90,8 +90,8 @@ model ChatSession {
 model Message {
   id        String   @id @default(cuid())
   sessionId String
-  role      String   // "user" | "model"
-  content   String   @db.Text
+  role      String   
+  content   String   
   createdAt DateTime @default(now())
   
   session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
