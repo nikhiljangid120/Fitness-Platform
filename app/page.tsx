@@ -20,6 +20,7 @@ import {
   CheckCircle,
   ArrowUpRight,
 } from "lucide-react"
+
 import { Flame as Fire, Clock, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
