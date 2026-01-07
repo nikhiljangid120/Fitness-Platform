@@ -29,6 +29,7 @@ import WorkoutOfTheDay from "@/components/workout-of-the-day"
 import FitnessCalculator from "@/components/fitness-calculator"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
+import { useState, useEffect } from "react"
 
 export default function Home() {
   const router = useRouter()
