@@ -38,21 +38,24 @@ export async function generateWeeklyPlan() {
       RECENT FEEDBACK FROM USER (Adapt the plan based on this):
       ${historySummary || "No recent workout history."}
       
-      Return ONLY valid JSON. The format must be an array of 7 objects, where each object represents a day:
-      [
-        {
-          "day": "Monday",
-          "workout": {
-            "title": "Upper Body Power",
-            "description": "Focus on chest and back compund movements",
-            "duration": "45 min",
-            "level": "Intermediate",
-            "equipment": ["Dumbbells", "Bench"]
+      Return ONLY valid JSON with this structure:
+      {
+        "weeklySummary": "A 2-sentence summary of the focus for this week (e.g., 'This week focuses on building upper body strength...').",
+        "schedule": [
+          {
+            "day": "Monday",
+            "workout": {
+              "title": "Upper Body Power",
+              "description": "Focus on chest and back compound movements",
+              "duration": "45 min",
+              "level": "Intermediate",
+              "equipment": ["Dumbbells", "Bench"]
+            },
+            "rest": false
           },
-          "rest": false
-        },
-        ...
-      ]
+          ...
+        ]
+      }
       
       If it's a rest day, set "rest": true and "workout": null.
       Do not include markdown formatting like \`\`\`json. Just the raw JSON string.
@@ -69,10 +72,16 @@ export async function generateWeeklyPlan() {
             // Clean up potential markdown code blocks if Gemini ignores instruction
             const cleanedJson = aiResponse.replace(/```json/g, "").replace(/```/g, "").trim()
             planData = JSON.parse(cleanedJson)
+
+            // Normalize old array format to new object format if needed
+            if (Array.isArray(planData)) {
+                planData = {
+                    weeklySummary: "Your personalized weekly workout plan.",
+                    schedule: planData
+                }
+            }
         } catch (e) {
             console.warn("Failed to parse AI JSON, falling back to text save", e)
-            // In a real app, we'd retry or have a robust fallback.
-            // For now, let's error out to trigger a retry or manual check
             return { success: false, error: "Failed to generate valid plan format" }
         }
 
