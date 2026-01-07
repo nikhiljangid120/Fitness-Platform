@@ -259,7 +259,7 @@ export default function DashboardClient({ user, stats }: DashboardProps) {
                     )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                        {currentWorkoutPlan.map((day, index) => {
+                        {currentWorkoutPlan.map((day: any, index: number) => {
                             // Determine image for the day's workout
                             const workoutImage = day.workout
                                 ? day.workout.image || getImageForKeyword(day.workout.title)

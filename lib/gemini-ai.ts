@@ -5,39 +5,48 @@ const groq = new Groq({
   dangerouslyAllowBrowser: true // Only if needed client-side, but this is server-side
 })
 
+import { GoogleGenerativeAI } from "@google/generative-ai"
+
 export async function generateAIResponse(prompt: string): Promise<string> {
-  console.log("Generating AI response with Groq...")
+  console.log("Generating AI response...")
 
-  if (!process.env.GROQ_API_KEY) {
-    console.warn("GROQ_API_KEY is missing. Using fallback.")
-    return getFallbackResponse(prompt)
+  // 1. Try Groq (Fastest)
+  if (process.env.GROQ_API_KEY) {
+    try {
+      console.log("Attempting Groq...")
+      const completion = await groq.chat.completions.create({
+        messages: [
+          { role: "system", content: "You are an expert fitness trainer. Return valid JSON when requested." },
+          { role: "user", content: prompt }
+        ],
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.7,
+      })
+      const content = completion.choices[0]?.message?.content || ""
+      if (content) return content
+    } catch (error) {
+      console.warn("Groq failed, trying fallback...", error)
+    }
   }
 
-  try {
-    const completion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert fitness trainer and nutritionist. Always return valid JSON when requested. Avoid markdown formatting in JSON responses."
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      model: "llama-3.3-70b-versatile", // Updated to supported model
-      temperature: 0.7,
-      max_tokens: 4096,
-    })
+  // 2. Try Google Gemini (Backup)
+  if (process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+    try {
+      console.log("Attempting Gemini...")
+      const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY)
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" })
 
-    const responseContent = completion.choices[0]?.message?.content || ""
-    console.log("✅ Groq Response Received")
-    return responseContent
-
-  } catch (error) {
-    console.error("❌ Groq API Error:", error)
-    return getFallbackResponse(prompt)
+      const result = await model.generateContent(prompt)
+      const response = await result.response
+      const text = response.text()
+      if (text) return text
+    } catch (error) {
+      console.warn("Gemini failed, using hardcoded fallback...", error)
+    }
   }
+
+  // 3. Hardcoded Fallback
+  return getFallbackResponse(prompt)
 }
 
 // Keep existing fallback logic for safety
