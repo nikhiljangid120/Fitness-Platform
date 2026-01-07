@@ -15,13 +15,20 @@ export async function getCurrentUser() {
     }
 
     // Try to find existing user
-    const user = await prisma.user.findUnique({
-        where: { email },
-    })
+    let user = null; // Declare user outside the try block if it needs to be accessed later
+    try {
+        user = await prisma.user.findUnique({
+            where: { email },
+        })
 
-    // If user exists, return it
-    if (user) {
-        return user
+        if (user) {
+            return user
+        }
+    } catch (error) {
+        console.error("Error fetching user from DB:", error)
+        // Fallback: If DB is unreachable, we treat it as no user found (or handled by caller)
+        // This prevents the entire app from 500ing on flaky connections
+        return null
     }
 
     // If not, create new user
