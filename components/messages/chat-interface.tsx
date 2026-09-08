@@ -545,4 +545,3 @@ function Play(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
-
